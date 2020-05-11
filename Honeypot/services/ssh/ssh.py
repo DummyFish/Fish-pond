@@ -1,7 +1,7 @@
 import logging
 import threading
 from socket import socket, timeout
-from Honeypot.services.service import Service
+from services.origin_service import Service
 import paramiko
 
 # generate keys with 'ssh-keygen -t rsa -f server.key'

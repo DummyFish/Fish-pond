@@ -1,6 +1,6 @@
 import configparser
 import sys
-from Honeypot import checkService
+from checkService import check
 
 print("hello")
 
@@ -10,4 +10,4 @@ config = configparser.ConfigParser()
 config.read(config_filepath)
 
 if __name__ == '__main__':
-    checkService.check(config)
+    check(config)
