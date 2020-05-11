@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 import asyncore
 import smtpd
 from services.origin_service import Service
