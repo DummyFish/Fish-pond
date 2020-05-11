@@ -77,3 +77,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+#local cache 
+*.pyc
