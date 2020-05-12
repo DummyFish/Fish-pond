@@ -2,6 +2,7 @@ from multiprocessing import Process
 from services.ssh.ssh import SSH
 from services.smtp.smtp import SMTP
 from services.ftp.ftp import FTP
+from services.telnet.telnet import TelnetClient
 
 
 def check(config):
@@ -9,6 +10,7 @@ def check(config):
     log_filepath = config.get('default', 'logfile', raw=True, fallback="./logfile.log")
 
     print("service started, check which service is started:")
+
     ssh_states = config.get('ssh', 'status', raw=True, fallback="0")
     if ssh_states == "1":
         print("service ssh start")
@@ -25,12 +27,21 @@ def check(config):
         # SMTP(host, smtp_port, log_filepath, "smtp")
         smtp_process = Process(target=SMTP, args=(host, smtp_port, log_filepath, "smtp"))
         smtp_process.start()
+
     ftp_states = config.get('ftp', 'status', raw=True, fallback="0")
     if ftp_states == "1":
         print("service ftp start")
         ftp_port = config.get('ftp', 'port', raw=True, fallback="21")
-        ftp_process = Process(target=FTP, args=(host, smtp_port, log_filepath, "ftp"))
-        smtp_process.start()
+        ftp_process = Process(target=FTP, args=(host, ftp_port, log_filepath, "ftp"))
+        ftp_process.start()
+
+    telnet_states = config.get('telnet', 'status', raw=True, fallback="0")
+    if telnet_states == "1":
+        print("service telnet start")
+        telnet_port = config.get('telnet', 'port', raw=True, fallback="23")
+        telnet_process = Process(target=TelnetClient, args=(host, telnet_port, log_filepath, "telnet"))
+        telnet_process.start()
+
 
     # other service
     print("other")

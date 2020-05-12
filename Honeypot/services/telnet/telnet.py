@@ -1,9 +1,7 @@
 import sys
-sys.path.append('..')
 import logging
 import telnetlib
 import time
-import sys
 import argparse
 from socket import socket, AF_INET, SOCK_STREAM
 
@@ -38,5 +36,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     telnet(args.address)
-
-

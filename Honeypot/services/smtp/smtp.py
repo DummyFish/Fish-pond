@@ -1,10 +1,11 @@
 import sys
-sys.path.append('..')
 import asyncore
 import smtpd
 from services.origin_service import Service
 from smtpd import SMTPServer, DebuggingServer
 import asynchat
+sys.path.append('..')
+
 
 
 class SMTPChannel(smtpd.SMTPChannel):
