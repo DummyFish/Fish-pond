@@ -1,31 +1,81 @@
 import sys
+import os
 import logging
 import threading
+from pathlib import Path
 from socket import socket, timeout
-from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
+from pyftpdlib.authorizers import DummyAuthorizer,WindowsAuthorizer, AuthenticationFailed
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
 from services.origin_service import Service
 
 sys.path.append('..')
-
-
 class FakeAuthorizer(DummyAuthorizer):
-    def __init__(self, logger):
+    def __init__(self,logger):
         super().__init__()
+        self.user_table = {}
         self.logger = logger
 
+    def add_user(self, username, password, homedir, perm='elr',
+                 msg_login="Login successful.", msg_quit="Goodbye."):
+        if self.has_user(username):
+            raise ValueError('user %r already exists' % username)
+        if not os.path.isdir(homedir):
+            raise ValueError('no such directory: %r' % homedir)
+        homedir = os.path.realpath(homedir)
+        self._check_permissions(username, perm)
+        dic = {'pwd': str(password),
+               'home': homedir,
+               'perm': perm,
+               'operms': {},
+               'msg_login': str(msg_login),
+               'msg_quit': str(msg_quit)
+               }
+        self.user_table[username] = dic
+
+
     def validate_authentication(self, username, password, handler):
+        """Raises AuthenticationFailed if supplied username and
+        password don't match the stored credentials, else return
+        None.
+        """
         self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
-        raise AuthenticationFailed
 
+    def get_home_dir(self, username):
+        """Return the user's home directory.
+        Since this is called during authentication (PASS),
+        AuthenticationFailed can be freely raised by subclasses in case
+        the provided username no longer exists.
+        """
+        return "home/user"
+    
+    def impersonate_user(self, username, password):
+        """Impersonate another user (noop).
+        It is always called before accessing the filesystem.
+        By default it does nothing.  The subclass overriding this
+        method is expected to provide a mechanism to change the
+        current user.
+        """
 
-def handle_connection(client, logger):
-    authorizer = FakeAuthorizer(logger)
-    handler = FTPHandler
-    handler.authorizer = authorizer
-    server = FTPServer(client, handler)
-    server.serve_forever()
+    def terminate_impersonation(self, username):
+        """Terminate impersonation (noop).
+        It is always called after having accessed the filesystem.
+        By default it does nothing.  The subclass overriding this
+        method is expected to provide a mechanism to switch back
+        to the original user.
+        """
+
+    def get_msg_login(self, username):
+        """Return the user's login message."""
+        return self.user_table[username]['msg_login']
+
+    def get_msg_quit(self, username):
+        """Return the user's quitting message."""
+        try:
+            return self.user_table[username]['msg_quit']
+        except KeyError:
+            return "Goodbye."
+
 
 
 class FTP(Service):
@@ -38,22 +88,24 @@ class FTP(Service):
         self.start_listen()
 
     def start_listen(self):
-        listener = socket()
-        listener.bind((self.bind_ip, int(self.ports)))
-        listener.listen(5)
-        while True:
-            client, addr = listener.accept()
-            client_handler = threading.Thread(target=self.connection_response,
-                                              args=(client, self.ports, addr[0], addr[1]))
-            client_handler.start()
-
-    def connection_response(self, client_socket, port, ip, remote_port):
-        self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
-        client_socket.settimeout(30)
+        #authorizer = DummyAuthorizer()
+        authorizer = FakeAuthorizer(self.logger)
+        authorizer.add_user('user', '12345', '.', perm='elradfmwMT')
+        handler = FTPHandler
+        handler.authorizer = authorizer
+        address = (self.bind_ip,self.ports)
+        server = FTPServer(address,handler)
+        handler.timeout = 600
+        server.max_cons = 256
+        server.max_cons_per_ip = 5
+        self.logger.info("Connection received to service %s:%d  %s" % (self.name, self.ports, self.bind_ip))
         try:
-            handle_connection(client_socket, self.logger)
+            server.serve_forever()
         except timeout:
             pass
         except Exception as e:
             pass
-        client_socket.close()
+        except KeyboardInterrupt:
+            print('Detected interruption, terminating...')
+
+

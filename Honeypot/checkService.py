@@ -2,7 +2,6 @@ from multiprocessing import Process
 from services.ssh.ssh import SSH
 from services.smtp.smtp import SMTP
 from services.ftp.ftp import FTP
-from services.telnet.telnet import TelnetClient
 
 
 def check(config):
@@ -35,12 +34,12 @@ def check(config):
         ftp_process = Process(target=FTP, args=(host, ftp_port, log_filepath, "ftp"))
         ftp_process.start()
 
-    telnet_states = config.get('telnet', 'status', raw=True, fallback="0")
-    if telnet_states == "1":
-        print("service telnet start")
-        telnet_port = config.get('telnet', 'port', raw=True, fallback="23")
-        telnet_process = Process(target=TelnetClient, args=(host, telnet_port, log_filepath, "telnet"))
-        telnet_process.start()
+    # telnet_states = config.get('telnet', 'status', raw=True, fallback="0")
+    # if telnet_states == "1":
+    #     print("service telnet start")
+    #     telnet_port = config.get('telnet', 'port', raw=True, fallback="23")
+    #     telnet_process = Process(target=TelnetClient, args=(host, telnet_port, log_filepath, "telnet"))
+    #     telnet_process.start()
 
 
     # other service
