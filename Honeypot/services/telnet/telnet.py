@@ -2,7 +2,7 @@ import sys
 import logging
 import telnetlib
 import time
-from Honeypot.services.origin_service import Service
+from services.origin_service import Service
 sys.path.append('..')
 
 
