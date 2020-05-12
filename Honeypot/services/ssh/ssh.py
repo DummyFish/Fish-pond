@@ -1,10 +1,11 @@
 import sys
-sys.path.append('..')
 import logging
 import threading
 from socket import socket, timeout
 from services.origin_service import Service
 import paramiko
+
+sys.path.append('..')
 
 # generate keys with 'ssh-keygen -t rsa -f server.key'
 HOST_KEY = paramiko.RSAKey(filename='../server.key')

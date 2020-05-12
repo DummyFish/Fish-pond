@@ -1,5 +1,4 @@
 import sys
-sys.path.append('..')
 import logging
 import threading
 from socket import socket, timeout
@@ -8,18 +7,24 @@ from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
 from services.origin_service import Service
 
+sys.path.append('..')
+
+
 class FakeAuthorizer(DummyAuthorizer):
-    def __init__(self,logger):
+    def __init__(self, logger):
+        super().__init__()
         self.logger = logger
+
     def validate_authentication(self, username, password, handler):
         self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
         raise AuthenticationFailed
+
 
 def handle_connection(client, logger):
     authorizer = FakeAuthorizer(logger)
     handler = FTPHandler
     handler.authorizer = authorizer
-    server = FTPServer(client,handler)
+    server = FTPServer(client, handler)
     server.serve_forever()
 
 
@@ -52,5 +57,3 @@ class FTP(Service):
         except Exception as e:
             pass
         client_socket.close()
-
-
