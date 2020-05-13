@@ -47,7 +47,7 @@ class FakeAuthorizer(DummyAuthorizer):
         AuthenticationFailed can be freely raised by subclasses in case
         the provided username no longer exists.
         """
-        return "home/user"
+        return "."
     
     def impersonate_user(self, username, password):
         """Impersonate another user (noop).
@@ -77,7 +77,12 @@ class FakeAuthorizer(DummyAuthorizer):
             return "Goodbye."
 
 
-
+# to do: 
+# revise the FTPhandler so that it log the commend the user enters
+# chromn anonylums login 
+# change banner
+# restrain permission
+# 
 class FTP(Service):
     def __init__(self, bind_ip, ports, log_filepath, name):
         super().__init__(bind_ip, ports, log_filepath, name)
@@ -90,7 +95,6 @@ class FTP(Service):
     def start_listen(self):
         #authorizer = DummyAuthorizer()
         authorizer = FakeAuthorizer(self.logger)
-        authorizer.add_user('user', '12345', '.', perm='elradfmwMT')
         handler = FTPHandler
         handler.authorizer = authorizer
         address = (self.bind_ip,self.ports)
