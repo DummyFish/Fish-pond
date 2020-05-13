@@ -34,4 +34,4 @@ Details:
     - Any malicious activities.
     - send emails to the user   
 
-We expect to build an identical administrative website so that we can attract more malicious users. We expect thousands of connection attempts from multiple services such as ssh, FTP, and etc across the globe. We will visualize the result from our logging data. 
+We expect to build an identical administrative website so that we can attract more malicious users. We expect thousands of connection attempts from multiple services such as ssh, FTP, and etc across the globe. We will visualize the result from our logging data.
