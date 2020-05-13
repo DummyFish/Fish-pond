@@ -4,7 +4,7 @@ import logging
 import threading
 from pathlib import Path
 from socket import socket, timeout
-from pyftpdlib.authorizers import DummyAuthorizer,WindowsAuthorizer, AuthenticationFailed
+from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
 from services.origin_service import Service
