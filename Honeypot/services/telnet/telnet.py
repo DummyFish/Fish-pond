@@ -1,5 +1,4 @@
 import sys
-<<<<<<< Updated upstream
 import logging
 import threading
 from socket import socket, timeout
