@@ -1,46 +1,59 @@
-import socket
 import sys
-import select
-import string
+import logging
+import threading
+from socket import socket, timeout
+from origin_service import Service
+import telnetlib3
 
-if __name__ == "__main__":
-	
-	if(len(sys.argv) < 3) :
-		sys.exit()
-	
-	host = sys.argv[1]
-	port = int(sys.argv[2])
-	
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.settimeout(2)
-	
-	# connect to remote host
-	try :
-		s.connect((host, port))
-	except :
-		print ('Unable to connect')
-		sys.exit()
-	
-	print ('Connected to remote host')
-	
-	while 1:
-		socket_list = [sys.stdin, s]
-		
-		# Get the list sockets which are readable
-		read_sockets, write_sockets, error_sockets = select.select(socket_list , [], [])
-		
-		for sock in read_sockets:
-			#incoming message from remote server
-			if sock == s:
-				data = sock.recv(4096)
-				if not data :
-					print ('Connection closed')
-					sys.exit()
-				else :
-					#print data
-					sys.stdout.write(data)
-			
-			#user entered a message
-			else :
-				msg = sys.stdin.readline()
-				s.send(msg)
+
+
+
+class TelneterverHandler(telnetlib3.TelnetServer):
+    def __init__(self, logger):
+        self.event = threading.Event()
+        self.logger = logger
+
+    def check_auth_password(self, username, password):
+        logging.basicConfig(level=logging.DEBUG)
+        self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
+        return paramiko.AUTH_FAILED
+
+
+def handle_connection(client, logger, host_key):
+    transport = telnetlib3.TelnetServer.connection_made(client)
+    server_handler = TelnetServerHandler(logger)
+    transport.start_server(server=server_handler)
+    channel = transport.accept(20)
+    if channel is not None:
+        channel.close()
+
+
+class Telnet(Service):
+    def __init__(self, bind_ip, ports, log_filepath, name):
+        super().__init__(bind_ip, ports, log_filepath, name)
+        self.service_start()
+
+    def service_start(self):
+        print(self.name, "started on port", self.ports)
+        self.start_listen()
+
+    def start_listen(self):
+        listener = socket()
+        listener.bind((self.bind_ip, int(self.ports)))
+        listener.listen(5)
+        while True:
+            client, addr = listener.accept()
+            client_handler = threading.Thread(target=self.connection_response,
+                                              args=(client, self.ports, addr[0], addr[1]))
+            client_handler.start()
+
+    def connection_response(self, client_socket, port, ip, remote_port):
+        self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
+        client_socket.settimeout(30)
+        try:
+            handle_connection(client_socket, self.logger, self.host_key)
+        except timeout:
+            pass
+        except Exception as e:
+            pass
+        client_socket.close()
