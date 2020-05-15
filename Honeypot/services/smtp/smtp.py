@@ -1,10 +1,9 @@
 import sys
 import asyncore
 import smtpd
-from services.origin_service import Service
+from services import origin_service
 from smtpd import SMTPServer, DebuggingServer
 import asynchat
-sys.path.append('..')
 
 
 
@@ -45,7 +44,7 @@ class fakeServer(DebuggingServer):
                                      self._decode_data, self.logger)
 
 
-class SMTP(Service):
+class SMTP(origin_service.Service):
     def __init__(self, bind_ip, ports, log_filepath, name):
         super().__init__(bind_ip, ports, log_filepath, name)
         self.service_start()

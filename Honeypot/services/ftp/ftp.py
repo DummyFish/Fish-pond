@@ -7,7 +7,7 @@ from socket import socket, timeout
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
-from services.origin_service import Service
+from services import origin_service
 
 sys.path.append('..')
 class FakeAuthorizer(DummyAuthorizer):
@@ -83,7 +83,7 @@ class FakeAuthorizer(DummyAuthorizer):
 # change banner
 # restrain permission
 # 
-class FTP(Service):
+class FTP(origin_service.Service):
     def __init__(self, bind_ip, ports, log_filepath, name):
         super().__init__(bind_ip, ports, log_filepath, name)
         self.service_start()

@@ -2,10 +2,8 @@ import sys
 import logging
 import threading
 from socket import socket, timeout
-from services.origin_service import Service
+from services import origin_service
 import paramiko
-
-sys.path.append('..')
 
 # generate keys with 'ssh-keygen -t rsa -f server.key'
 HOST_KEY = paramiko.RSAKey(filename='../server.key')
@@ -36,7 +34,7 @@ def handle_connection(client, logger, host_key):
         channel.close()
 
 
-class SSH(Service):
+class SSH(origin_service.Service):
     def __init__(self, bind_ip, ports, log_filepath, host_key, name):
         super().__init__(bind_ip, ports, log_filepath, name)
         self.host_key = paramiko.RSAKey(filename=host_key)

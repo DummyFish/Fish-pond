@@ -1,8 +1,9 @@
 import sys
+<<<<<<< Updated upstream
 import logging
 import threading
 from socket import socket, timeout
-from origin_service import Service
+from services import origin_service
 import telnetlib3
 
 
@@ -29,7 +30,7 @@ def handle_connection(client, logger):
         channel.close()
 
 
-class Telnet(Service):
+class Telnet(origin_service.Service):
     def __init__(self, bind_ip, ports, log_filepath, name):
         super().__init__(bind_ip, ports, log_filepath, name)
         self.service_start()
@@ -58,3 +59,4 @@ class Telnet(Service):
         except Exception as e:
             pass
         client_socket.close()
+
