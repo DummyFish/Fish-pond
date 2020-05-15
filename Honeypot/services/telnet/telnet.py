@@ -20,7 +20,7 @@ class TelneterverHandler(telnetlib3.TelnetServer):
     
 
 
-def handle_connection(client, logger, host_key):
+def handle_connection(client, logger):
     transport = telnetlib3.TelnetServer.connection_made(client)
     server_handler = TelnetServerHandler(logger)
     transport.start_server(server=server_handler)
@@ -52,7 +52,7 @@ class Telnet(Service):
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         client_socket.settimeout(30)
         try:
-            handle_connection(client_socket, self.logger, self.host_key)
+            handle_connection(client_socket, self.logger)
         except timeout:
             pass
         except Exception as e:
