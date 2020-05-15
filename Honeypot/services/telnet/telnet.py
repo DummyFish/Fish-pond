@@ -16,7 +16,8 @@ class TelneterverHandler(telnetlib3.TelnetServer):
     def check_auth_password(self, username, password):
         logging.basicConfig(level=logging.DEBUG)
         self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
-        return paramiko.AUTH_FAILED
+        return False
+    
 
 
 def handle_connection(client, logger, host_key):
