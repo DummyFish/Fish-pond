@@ -3,6 +3,9 @@ from services.ssh.ssh import SSH
 from services.smtp import smtp
 from services.ftp import ftp
 from services.telnet import telnet
+from services.rdp import rdp
+from services.redis import redis
+
 
 def check(config):
     host = config.get('default', 'host', raw=True, fallback="0.0.0.0")
@@ -41,6 +44,21 @@ def check(config):
         telnet_process = Process(target=telnet.Telnet, args=(host, telnet_port, log_filepath, "telnet"))
         telnet_process.start()
 
+    rdp_states = config.get('rdp', 'status', raw=True, fallback="0")
+    if rdp_states == "1":
+        print("service rdp start")
+        rdp_port = config.get('rdp', 'port', raw=True, fallback="3389")
+        # RDP(host, rdp_port, log_filepath, "rdp")
+        rdp_process = Process(target=rdp.RDP, args=(host, rdp_port, log_filepath, "rdp"))
+        rdp_process.start()
+
+    redis_states = config.get('redis', 'status', raw=True, fallback="0")
+    if redis_states == "1":
+        print("service redis start")
+        redis_port = config.get('redis', 'port', raw=True, fallback="6379")
+        # Redis(host, redis_port, log_filepath, "redis")
+        redis_process = Process(target=redis.Redis, args=(host, redis_port, log_filepath, "redis"))
+        redis_process.start()
 
     # other service
     print("other")
