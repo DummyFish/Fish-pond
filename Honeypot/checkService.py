@@ -5,6 +5,8 @@ from services.ftp import ftp
 from services.telnet import telnet
 from services.rdp import rdp
 from services.redis import redis
+from services.pop3 import pop3
+
 
 
 def check(config):
@@ -44,6 +46,7 @@ def check(config):
         telnet_process = Process(target=telnet.Telnet, args=(host, telnet_port, log_filepath, "telnet"))
         telnet_process.start()
 
+
     rdp_states = config.get('rdp', 'status', raw=True, fallback="0")
     if rdp_states == "1":
         print("service rdp start")
@@ -51,6 +54,8 @@ def check(config):
         # RDP(host, rdp_port, log_filepath, "rdp")
         rdp_process = Process(target=rdp.RDP, args=(host, rdp_port, log_filepath, "rdp"))
         rdp_process.start()
+    
+
 
     redis_states = config.get('redis', 'status', raw=True, fallback="0")
     if redis_states == "1":
@@ -59,6 +64,14 @@ def check(config):
         # Redis(host, redis_port, log_filepath, "redis")
         redis_process = Process(target=redis.Redis, args=(host, redis_port, log_filepath, "redis"))
         redis_process.start()
+    
+    pop3_states = config.get('pop3', 'status', raw=True, fallback="0")
+    if pop3_states == "1":
+        print("service pop3 start")
+        pop3_port = config.get('pop3', 'port', raw=True, fallback="995")
+        # Redis(host, redis_port, log_filepath, "redis")
+        pop3_process = Process(target=pop3.POP3, args=(host, pop3_port, log_filepath, "pop3"))
+        pop3_process.start()
 
     # other service
     print("other")
