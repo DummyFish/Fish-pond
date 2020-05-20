@@ -6,7 +6,6 @@ from smtpd import SMTPServer, DebuggingServer
 import asynchat
 
 
-
 class SMTPChannel(smtpd.SMTPChannel):
     __version__ = '220 ESMTP Postfix (Debian/GNU)'
     version = 0

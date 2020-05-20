@@ -10,7 +10,7 @@ from services import origin_service
 
 sys.path.append('..')
 
- 
+
 class TFTP(origin_service.Service):
     def __init__(self, bind_ip, ports, log_filepath, name):
         super().__init__(bind_ip, ports, log_filepath, name)
@@ -23,8 +23,8 @@ class TFTP(origin_service.Service):
     def start_listen(self):
 
         handler = BaseHandler
-        address = (self.bind_ip,self.ports)
-        server = BaseServer(address,handler)
+        address = (self.bind_ip, self.ports)
+        server = BaseServer(address, handler)
         handler.timeout = 600
         server.max_cons = 256
         server.max_cons_per_ip = 5
@@ -37,5 +37,3 @@ class TFTP(origin_service.Service):
             pass
         except KeyboardInterrupt:
             print('Detected interruption, terminating...')
-
-

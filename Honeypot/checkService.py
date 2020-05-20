@@ -54,8 +54,6 @@ def check(config):
         # RDP(host, rdp_port, log_filepath, "rdp")
         rdp_process = Process(target=rdp.RDP, args=(host, rdp_port, log_filepath, "rdp"))
         rdp_process.start()
-    
-
 
     redis_states = config.get('redis', 'status', raw=True, fallback="0")
     if redis_states == "1":
@@ -69,7 +67,7 @@ def check(config):
     if pop3_states == "1":
         print("service pop3 start")
         pop3_port = config.get('pop3', 'port', raw=True, fallback="995")
-        # Redis(host, redis_port, log_filepath, "redis")
+        # POP3(host, redis_port, log_filepath, "redis")
         pop3_process = Process(target=pop3.POP3, args=(host, pop3_port, log_filepath, "pop3"))
         pop3_process.start()
 

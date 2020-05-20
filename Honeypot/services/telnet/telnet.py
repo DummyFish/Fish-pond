@@ -6,8 +6,6 @@ from services import origin_service
 import telnetlib3
 
 
-
-
 class TelneterverHandler(telnetlib3.TelnetServer):
     def __init__(self, logger):
         self.event = threading.Event()
@@ -17,7 +15,6 @@ class TelneterverHandler(telnetlib3.TelnetServer):
         logging.basicConfig(level=logging.DEBUG)
         self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
         return False
-    
 
 
 def handle_connection(client, logger):
@@ -58,4 +55,3 @@ class Telnet(origin_service.Service):
         except Exception as e:
             pass
         client_socket.close()
-
