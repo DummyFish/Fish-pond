@@ -1,8 +1,11 @@
 # Milestones
 
 Yizhi Huang: Soveless, RayCloud51
+
 Kirby Zhou: Haicatw
+
 Hulin Wang: DeviRule
+
 Damu Gao: jasongao1230
 
 ## milestone 1
