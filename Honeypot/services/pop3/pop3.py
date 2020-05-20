@@ -10,10 +10,11 @@ class POP3protocal:
         self.login = False
         self.server_socket = server_socket
 
-    def autheticate(self, user, password):
+    def autheticate(self, user, password, auth):
         self.server_socket.send('invalid credential, please try again\n'.encode())
         self.server_socket.shutdown(SHUT_RDWR)
         self.server_socket.close()
+        auth = True
 
     def interact(self, incomedata):
         return 'Fail'
@@ -22,24 +23,25 @@ class POP3protocal:
 def POP3server_thread(client_socket, logger):
     client_socket.send('* OK POP Service is ready\n'.encode())
     auth = False
-    while not auth:
-        client_socket.send('please enter username:\n'.encode())
-        username = str(client_socket.recv(1024), "utf-8")
-        client_socket.send('please enter password:\n'.encode())
-        password = str(client_socket.recv(1024), "utf-8")
-        logger.info("New login -  - username:" + username + " - - " + "password:" + password)
-        manager = POP3protocal(client_socket)
-        auth = manager.autheticate(username, password)
-
     try:
-        while 1:
-            incomingData = str(client_socket.recv(1024), "utf-8")
-            if not incomingData:
-                break
-            outgoingData = manager.interact(incomingData)
-            if not outgoingData:
-                break
-            client_socket.send(bytes(outgoingData + "\n", "utf-8"))
+        # while not auth:
+        client_socket.send(b"please enter username:")
+        username = str(client_socket.recv(1024), "utf-8").replace("\n", "").replace("\r", "")
+        client_socket.send(b"please enter password:")
+        password = str(client_socket.recv(1024), "utf-8").replace("\n", "").replace("\r", "")
+        logger.info("New login -  - username: " + username + " - - " + "password: " + password)
+        manager = POP3protocal(client_socket)
+        manager.autheticate(username, password, auth)
+
+    # try:
+    #     while 1:
+    #         incomingData = str(client_socket.recv(1024), "utf-8")
+    #         if not incomingData:
+    #             break
+    #         outgoingData = manager.interact(incomingData)
+    #         if not outgoingData:
+    #             break
+    #         client_socket.send(bytes(outgoingData + "\n", "utf-8"))
     except KeyboardInterrupt:
         client_socket.shutdown(SHUT_RDWR)
         client_socket.close()
@@ -60,12 +62,8 @@ class POP3(origin_service.Service):
         listener.listen(5)
         while True:
             client, addr = listener.accept()
-            # self.connection_response(client, self.ports, addr[0], addr[1])
-            client_handler = threading.Thread(target=self.waitforconnection,
-                                              args=(client, self.ports, addr[0], addr[1]))
-            client_handler.start()
+            self.waitforconnection(client, self.ports, addr[0], addr[1])
 
     def waitforconnection(self, client_socket, port, ip, remote_port):
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
-        client_socket.settimeout(30)
         POP3server_thread(client_socket, self.logger)
