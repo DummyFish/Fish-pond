@@ -82,7 +82,7 @@ def handle_connection(client_socket, logger, name, port):
     while True:
         msg = "redis 127.0.0.1:" + str(port) + " > "
         client_socket.send(msg.encode())
-        rcvdata = str(client_socket.recv(1024), "utf-8")
+        rcvdata = client_socket.recv(1024).decode("utf-8").replace("\n", "")
         if rcvdata == "quit":
             client_socket.shutdown(SHUT_RDWR)
             client_socket.close()
