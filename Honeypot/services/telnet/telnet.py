@@ -1,13 +1,14 @@
 import sys
 import logging
 import threading
-from socket import socket, timeout
+from socket import socket, timeout, SHUT_RDWR
 from services import origin_service
 import telnetlib3
 
 
 class TelneterverHandler(telnetlib3.TelnetServer):
-    def __init__(self, logger):
+    def __init__(self, logger, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.event = threading.Event()
         self.logger = logger
 
@@ -18,12 +19,20 @@ class TelneterverHandler(telnetlib3.TelnetServer):
 
 
 def handle_connection(client, logger):
-    transport = telnetlib3.TelnetServer.connection_made(client)
-    server_handler = TelnetServerHandler(logger)
-    transport.start_server(server=server_handler)
-    channel = transport.accept(20)
-    if channel is not None:
-        channel.close()
+    # unusable temperally change to no interaction log
+    while True:
+        try:
+            rcvdata = client.recv(1024).decode("utf-8").replace("\n", "")
+            logger.info("received command: %s" % rcvdata)
+        except KeyboardInterrupt:
+            client.shutdown(SHUT_RDWR)
+            client.close()
+    # transport = telnetlib3.TelnetServer.connection_made(client)
+    # server_handler = TelnetServerHandler(logger)
+    # transport.start_server(server=server_handler)
+    # channel = transport.accept(20)
+    # if channel is not None:
+    #     channel.close()
 
 
 class Telnet(origin_service.Service):
@@ -52,6 +61,9 @@ class Telnet(origin_service.Service):
             handle_connection(client_socket, self.logger)
         except timeout:
             pass
+        except KeyboardInterrupt:
+            print('Detected interruption, terminating...')
+            client_socket.close()
         except Exception as e:
             pass
         client_socket.close()
