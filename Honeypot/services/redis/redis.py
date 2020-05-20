@@ -82,8 +82,9 @@ def handle_connection(client_socket, logger, name, port):
     while True:
         msg = "redis 127.0.0.1:" + str(port) + " > "
         client_socket.send(msg.encode())
-        rcvdata = client_socket.recv(1024).decode("utf-8").replace("\n", "")
+        rcvdata = client_socket.recv(1024).decode("utf-8").replace("\n", "").replace("\r", "")
         if rcvdata == "quit":
+            logger.info("client quit")
             client_socket.shutdown(SHUT_RDWR)
             client_socket.close()
             break
@@ -106,13 +107,9 @@ class Redis(Service):
         while True:
             client, addr = listener.accept()
             self.connection_response(client, self.ports, addr[0], addr[1])
-            client_handler = threading.Thread(target=self.connection_response,
-                                              args=(client, self.ports, addr[0], addr[1]))
-            client_handler.start()
 
     def connection_response(self, client_socket, port, ip, remote_port):
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
-        client_socket.settimeout(30)
         try:
             handle_connection(client_socket, self.logger, self.name, self.ports)
         except timeout:
