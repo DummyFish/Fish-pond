@@ -1,6 +1,7 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer app permanent>
+    <v-system-bar> </v-system-bar>
+    <v-navigation-drawer app clipped permanent>
       <v-list>
         <v-list-item link>
           <v-list-item-icon>
@@ -43,5 +44,7 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data: () => ({})
+}
 </script>

@@ -46,13 +46,15 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
+  auth: {},
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
@@ -70,6 +72,15 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3
+        },
+        light: {
+          primary: '#3f51b5',
+          secondary: '#2196f3',
+          accent: '#03a9f4',
+          error: '#f44336',
+          warning: '#ffeb3b',
+          info: '#00bcd4',
+          success: '#4caf50'
         }
       }
     }
