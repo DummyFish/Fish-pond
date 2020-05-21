@@ -1,14 +1,36 @@
 import sys
-import os
 import logging
 import threading
-from pathlib import Path
-from socket import socket, timeout
-from fbtftp.base_handler import BaseHandler
-from fbtftp.base_server import BaseServer
+from socket import socket, timeout, AF_INET, SOCK_STREAM, SHUT_RDWR
 from services import origin_service
 
-sys.path.append('..')
+
+class TFTPprotocal:
+    def __init__(self, server_socket):
+        self.login = False
+        self.server_socket = server_socket
+
+
+    def interact(self, incomedata):
+        return 'please enter the correct commend'
+
+
+def TFTPserver_thread(client_socket, logger):
+    client_socket.send(bytes('* OK TFTP Service is ready\n',"utf-8"))
+    try:
+        # while not auth:
+        client_socket.send(b'tftp server:')
+        manager =TFTPprotocal(client_socket)
+        logger.info("New login\n")
+        while 1:
+            incomingData = str(client_socket.recv(1024), "utf-8").replace("\n", "").replace("\r", "")
+            logger.info("new command " + incomingData)
+            outgoingData = manager.interact(incomingData)
+            client_socket.send(bytes(outgoingData + "\n", "utf-8"))
+
+    except KeyboardInterrupt:
+        client_socket.shutdown(SHUT_RDWR)
+        client_socket.close()
 
 
 class TFTP(origin_service.Service):
@@ -21,19 +43,13 @@ class TFTP(origin_service.Service):
         self.start_listen()
 
     def start_listen(self):
+        listener = socket(AF_INET, SOCK_STREAM)
+        listener.bind((self.bind_ip, int(self.ports)))
+        listener.listen(5)
+        while True:
+            client, addr = listener.accept()
+            self.waitforconnection(client, self.ports, addr[0], addr[1])
 
-        handler = BaseHandler
-        address = (self.bind_ip, self.ports)
-        server = BaseServer(address, handler)
-        handler.timeout = 600
-        server.max_cons = 256
-        server.max_cons_per_ip = 5
-        self.logger.info("Connection received to service %s:%d  %s" % (self.name, self.ports, self.bind_ip))
-        try:
-            server.serve_forever()
-        except timeout:
-            pass
-        except Exception as e:
-            pass
-        except KeyboardInterrupt:
-            print('Detected interruption, terminating...')
+    def waitforconnection(self, client_socket, port, ip, remote_port):
+        self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
+        TFTPserver_thread(client_socket, self.logger)

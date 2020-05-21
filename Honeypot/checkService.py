@@ -6,7 +6,7 @@ from services.telnet import telnet
 from services.rdp import rdp
 from services.redis import redis
 from services.pop3 import pop3
-
+from services.tftp import tftp
 
 
 def check(config):
@@ -70,6 +70,14 @@ def check(config):
         # POP3(host, redis_port, log_filepath, "redis")
         pop3_process = Process(target=pop3.POP3, args=(host, pop3_port, log_filepath, "pop3"))
         pop3_process.start()
+
+    tftp_states = config.get('tftp', 'status', raw=True, fallback="0")
+    if tftp_states == "1":
+        print("service tftp start")
+        tftp_port = config.get('tftp', 'port', raw=True, fallback="69")
+        # tftp(host, redis_port, log_filepath, "tftp")
+        tftp_process = Process(target=tftp.TFTP, args=(host, tftp_port, log_filepath, "tftp"))
+        tftp_process.start()
 
     # other service
     print("other")
