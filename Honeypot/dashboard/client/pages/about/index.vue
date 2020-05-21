@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col :cols="12">
-        <v-card outlined>
+        <v-card class="ma-6 pa-6 mt-0">
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="headline mb-1"
@@ -28,7 +28,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-        <v-card outlined>
+        <v-card class="ma-6 pa-6">
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="headline mb-1"
@@ -48,9 +48,11 @@
 
 <script>
 export default {
-  data: () => ({
-    repo: 'https://github.com/DummyFish/Fish-pond'
-  })
+  computed: {
+    repo() {
+      return this.$store.state.gitRepo
+    }
+  }
 }
 </script>
 

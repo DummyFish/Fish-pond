@@ -28,7 +28,8 @@ export const state = () => ({
     tftp: '#736DB1',
     pop3: '#A979A9',
     honeypot: '#9C9C9A'
-  }
+  },
+  gitRepo: 'https://github.com/DummyFish/Fish-pond'
 })
 
 export const mutations = {

@@ -60,6 +60,10 @@
 
 <script>
 export default {
-  data: () => ({ repo: 'https://github.com/DummyFish/Fish-pond' })
+  computed: {
+    repo() {
+      return this.$store.state.gitRepo
+    }
+  }
 }
 </script>
