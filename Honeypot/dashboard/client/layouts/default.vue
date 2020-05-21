@@ -1,9 +1,9 @@
 <template>
   <v-app dark>
-    <v-system-bar> </v-system-bar>
+    <!-- <v-system-bar> </v-system-bar> -->
     <v-navigation-drawer app clipped permanent>
       <v-list>
-        <v-list-item link>
+        <v-list-item>
           <v-list-item-icon>
             <v-icon large>mdi-fishbowl</v-icon>
           </v-list-item-icon>
@@ -17,19 +17,19 @@
       <v-divider></v-divider>
 
       <v-list nav dense>
-        <v-list-item link>
+        <v-list-item link to="/" nuxt>
           <v-list-item-icon>
             <v-icon>mdi-rocket</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Dashboard</v-list-item-title>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link to="/services" nuxt>
           <v-list-item-icon>
             <v-icon>mdi-toolbox</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Services</v-list-item-title>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link to="/user" nuxt>
           <v-list-item-icon>
             <v-icon>mdi-account-cog</v-icon>
           </v-list-item-icon>

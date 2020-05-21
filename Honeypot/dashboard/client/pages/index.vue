@@ -59,6 +59,10 @@
                     {{ log.time }}
                   </div>
                 </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn>Details</v-btn>
+                </v-card-actions>
               </v-card>
             </v-timeline-item>
           </v-timeline>
@@ -79,16 +83,16 @@ export default {
     items: [
       {
         id: 'ssh',
-        color: '#FFADAD',
+        color: '#AE6A6A',
         count: 10
       },
-      { id: 'ftp', color: '#FFD6A5', count: 15 },
-      { id: 'rdp', color: '#FDFFB6', count: 6 },
-      { id: 'redis', color: '#CAFFBF', count: 8 },
-      { id: 'smtp', color: '#9BF6FF', count: 1 },
-      { id: 'telnet', color: '#A0C4FF', count: 4 },
-      { id: 'tftp', color: '#BDB2FF', count: 9 },
-      { id: 'pop3', color: '#FFC6FF', count: 9 }
+      { id: 'ftp', color: '#A98365', count: 15 },
+      { id: 'rdp', color: '#9E9E6F', count: 6 },
+      { id: 'redis', color: '#7BA375', count: 8 },
+      { id: 'smtp', color: '#5F9DA5', count: 1 },
+      { id: 'telnet', color: '#6278AF', count: 4 },
+      { id: 'tftp', color: '#736DB1', count: 9 },
+      { id: 'pop3', color: '#A979A9', count: 9 }
     ],
     logs: [
       {
@@ -123,14 +127,14 @@ export default {
       }
     ],
     colorMap: {
-      ssh: '#FFADAD',
-      ftp: '#FFD6A5',
-      rdp: '#FDFFB6',
-      redis: '#CAFFBF',
-      smtp: '#9BF6FF',
-      telnet: '#A0C4FF',
-      tftp: '#BDB2FF',
-      pop3: '#FFC6FF'
+      ssh: '#AE6A6A',
+      ftp: '#A98365',
+      rdp: '#9E9E6F',
+      redis: '#7BA375',
+      smtp: '#5F9DA5',
+      telnet: '#6278AF',
+      tftp: '#736DB1',
+      pop3: '#A979A9'
     },
     trendData: {
       labels: [
