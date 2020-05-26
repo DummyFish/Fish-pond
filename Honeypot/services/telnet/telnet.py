@@ -1,28 +1,37 @@
 import sys
 import logging
 import threading
+from datetime import datetime
 from socket import socket, timeout, SHUT_RDWR
 from services import origin_service
 import telnetlib3
 
 
 class TelneterverHandler(telnetlib3.TelnetServer):
-    def __init__(self, logger, *args, **kwargs):
+    def __init__(self, logger, logs, ip, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.event = threading.Event()
         self.logger = logger
+        self.logs = logs
+        self.ip = ip
 
     def check_auth_password(self, username, password):
-        logging.basicConfig(level=logging.DEBUG)
+        now = datetime.now()
+        info = {"time": now, "service": "ssh", "type": "login", "ip": self.ip, "username": username,
+                "password": password}
+        self.logs.put(info)
         self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
         return False
 
 
-def handle_connection(client, logger):
+def handle_connection(client, logger, logs, ip):
     # unusable temperally change to no interaction log
     while True:
         try:
             rcvdata = client.recv(1024).decode("utf-8").replace("\n", "")
+            now = datetime.now()
+            info = {"time": now, "service": "telnet", "type": "command", "ip": ip, "command": rcvdata}
+            logs.put(info)
             logger.info("received command: %s" % rcvdata)
         except KeyboardInterrupt:
             client.shutdown(SHUT_RDWR)
@@ -36,8 +45,8 @@ def handle_connection(client, logger):
 
 
 class Telnet(origin_service.Service):
-    def __init__(self, bind_ip, ports, log_filepath, name):
-        super().__init__(bind_ip, ports, log_filepath, name)
+    def __init__(self, bind_ip, ports, log_filepath, name, logs):
+        super().__init__(bind_ip, ports, log_filepath, name, logs)
         self.service_start()
 
     def service_start(self):
@@ -55,10 +64,13 @@ class Telnet(origin_service.Service):
             client_handler.start()
 
     def connection_response(self, client_socket, port, ip, remote_port):
+        now = datetime.now()
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         client_socket.settimeout(30)
         try:
-            handle_connection(client_socket, self.logger)
+            handle_connection(client_socket, self.logger, self.logs, ip)
         except timeout:
             pass
         except KeyboardInterrupt:

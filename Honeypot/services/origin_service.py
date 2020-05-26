@@ -4,13 +4,14 @@ from socket import socket, timeout
 
 
 class Service(object):
-    def __init__(self, bind_ip, ports, log_filepath, name):
+    def __init__(self, bind_ip, ports, log_filepath, name, logs):
         if len(ports) < 1:
             raise Exception("No ports provided.")
         self.name = name
         self.bind_ip = bind_ip
         self.ports = int(ports)
         self.log_filepath = log_filepath
+        self.logs = logs
         self.logger = self.prepare_logger()
 
     def prepare_logger(self):
