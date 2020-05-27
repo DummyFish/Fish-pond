@@ -60,8 +60,8 @@
                   </div>
                 </v-card-text>
                 <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn>Details</v-btn>
+                  <!-- <v-spacer></v-spacer>
+                  <v-btn>Details</v-btn> -->
                 </v-card-actions>
               </v-card>
             </v-timeline-item>

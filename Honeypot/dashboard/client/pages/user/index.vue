@@ -64,14 +64,20 @@ export default {
   methods: {
     async userLogin(password) {
       try {
-        const response = await this.$axios.patch('/auth/reset_password', {
-          password
+        // const response =
+        await this.$axios.patch('/api/auth/reset_password', {
+          data: password
         })
+        this.logout()
         // this.$auth.setToken('local', 'Bearer ' + response.data.token)
-        console.log(response)
+        // console.log(response)
       } catch (err) {
         console.log(err)
       }
+    },
+    async logout() {
+      const response = await this.$auth.logout()
+      console.log(response)
     }
   }
 }

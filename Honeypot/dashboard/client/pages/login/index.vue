@@ -3,6 +3,12 @@
     <v-row align="center" justify="center">
       <v-col cols="12" align="center">
         <v-card class="ma-6 pa-6" height="50%" width="50%">
+          <v-snackbar v-model="showSnackbar" top>
+            Login Failed, Please try again.
+            <v-btn color="error" text @click="showSnackbar = false">
+              Dismiss
+            </v-btn>
+          </v-snackbar>
           <v-card-text class="display-1 text--primary">
             Fish Pond Login
           </v-card-text>
@@ -41,22 +47,25 @@ export default {
     rules: {
       required: (value) => !!value || 'Required.'
     },
-    isValid: false
+    isValid: false,
+    showSnackbar: false
   }),
   methods: {
     async userLogin(psword) {
       try {
-        const response = await this.$auth.loginWith('local', {
+        // const response =
+        await this.$auth.loginWith('local', {
           data: {
             username: 'default',
             password: psword
           }
         })
         // this.$auth.setToken('local', 'Bearer ' + response.data.token)
-        console.log(response)
-        console.log(this.$auth.loggedIn)
+        // console.log(response)
+        // console.log(this.$auth.loggedIn)
       } catch (err) {
-        console.log(err)
+        // console.log(err)
+        this.showSnackbar = true
       }
     }
   }

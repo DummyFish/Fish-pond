@@ -1,6 +1,6 @@
 import os
 import signal
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, json
 from functools import wraps
 from flask_cors import CORS
 from datetime import datetime, timedelta
@@ -82,8 +82,11 @@ def create_app():
     @require_authenticate
     @app.route('/api/auth/reset_password', methods=['PATCH'])
     def reset_password():
-        print(request.data)
-        reset_user_password(request.data)
+        # print(request.data)
+        data = json.loads(request.data.decode('utf8'))
+        # print(data['data'])
+        reset_user_password(data['data'])
+        return jsonify({ 'authenticated': False }), 200
 
     return app
 
