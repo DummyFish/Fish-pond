@@ -30,7 +30,8 @@ def handle_connection(client, logger, logs, ip):
         try:
             rcvdata = client.recv(1024).decode("utf-8").replace("\n", "")
             now = datetime.now()
-            info = {"time": now, "service": "telnet", "type": "command", "ip": ip, "command": rcvdata}
+            info = {"time": now, "service": "telnet", "type": "command", "ip": ip, "username": "",
+                    "password": "", "command": rcvdata}
             logs.put(info)
             logger.info("received command: %s" % rcvdata)
         except KeyboardInterrupt:
@@ -65,7 +66,8 @@ class Telnet(origin_service.Service):
 
     def connection_response(self, client_socket, port, ip, remote_port):
         now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "",
+                "password": "", "command": ""}
         self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         client_socket.settimeout(30)

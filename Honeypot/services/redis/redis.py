@@ -83,7 +83,8 @@ class RedisServer(object):
 
 def send_log_command(logs, ip, command):
     now = datetime.now()
-    info = {"time": now, "service": "redis", "type": "command", "ip": ip, "command": command}
+    info = {"time": now, "service": "redis", "type": "command", "ip": ip, "username": "",
+            "password": "", "command": command}
     logs.put(info)
 
 
@@ -120,7 +121,8 @@ class Redis(Service):
 
     def connection_response(self, client_socket, port, ip, remote_port):
         now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "",
+                "password": "", "command": ""}
         self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         try:

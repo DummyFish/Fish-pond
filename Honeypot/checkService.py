@@ -11,10 +11,36 @@ from services.tftp import tftp
 import multiprocessing
 
 
+def create_db():
+    database = sqlite3.connect('../logger.db')
+    data = database.cursor()
+    cursor = data.execute("CREATE TABLE IF NOT EXISTS FishPond(id integer primary key NOT NULL, \
+                          exetime Timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL, service varchar(64),types varchar(64), \
+                          ip varchar(64), username varchar(64), password varchar(64), command varchar(1024))")
+    return database
+
+
+def send_to_sql(database, result):
+    sql = ''' INSERT INTO FishPond(exetime,service,types,ip,username,password,command)
+                  VALUES(?,?,?,?,?,?,?) '''
+    time = result['time']
+    service = result['service']
+    datatype = result['type']
+    ip = result['ip']
+    username = result['username']
+    password = result['password']
+    command = result['command']
+    data = database.cursor()
+    insert = (time, service, datatype, ip, username, password, command)
+    data.execute(sql, insert)
+    database.commit()
+
+
 def check(config):
     host = config.get('default', 'host', raw=True, fallback="0.0.0.0")
     log_filepath = config.get('default', 'logfile', raw=True, fallback="./logfile.log")
     logs = multiprocessing.Queue()
+    database = create_db()
     print("service started, check which service is started:")
 
     ssh_states = config.get('ssh', 'status', raw=True, fallback="0")
@@ -83,3 +109,9 @@ def check(config):
 
     # other service
     print("other")
+    while True:
+        for i in range(5):
+            result = logs.get()
+            send_to_sql(database, result)
+            print('Result:', result)
+        sleep(2)

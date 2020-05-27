@@ -32,7 +32,7 @@ def POP3server_thread(client_socket, logger, logs, ip):
         password = str(client_socket.recv(1024), "utf-8").replace("\n", "").replace("\r", "")
         now = datetime.now()
         info = {"time": now, "service": "pop3", "type": "login", "ip": ip, "username": username,
-                "password": password}
+                "password": password, "command": ""}
         logs.put(info)
         logger.info("New login -  - username: " + username + " - - " + "password: " + password)
         manager = POP3protocal(client_socket)
@@ -71,7 +71,8 @@ class POP3(origin_service.Service):
 
     def waitforconnection(self, client_socket, port, ip, remote_port):
         now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "",
+                "password": "", "command": ""}
         self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         POP3server_thread(client_socket, self.logger, self.logs, ip)

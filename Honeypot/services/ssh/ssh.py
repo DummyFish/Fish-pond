@@ -24,7 +24,7 @@ class SSHServerHandler(paramiko.ServerInterface):
     def check_auth_password(self, username, password):
         now = datetime.now()
         info = {"time": now, "service": "ssh", "type": "login", "ip": self.ip, "username": username,
-                "password": password}
+                "password": password, "command": ""}
         self.logs.put(info)
         self.logger.info("New login: username:" + username + " -- " + "password:" + password)
         return paramiko.AUTH_FAILED
@@ -63,7 +63,8 @@ class SSH(origin_service.Service):
 
     def connection_response(self, client_socket, port, ip, remote_port):
         now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "", "password": "",
+                "command": ""}
         self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         client_socket.settimeout(30)

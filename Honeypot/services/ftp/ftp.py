@@ -43,7 +43,7 @@ class FakeAuthorizer(DummyAuthorizer):
         """
         now = datetime.now()
         info = {"time": now, "service": "ftp", "type": "login", "ip": self.ip, "username": username,
-                "password": password}
+                "password": password, "command": ""}
         self.logs.put(info)
         self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
 
@@ -109,7 +109,8 @@ class FTP(origin_service.Service):
         server.max_cons = 256
         server.max_cons_per_ip = 5
         now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": self.bind_ip}
+        info = {"time": now, "service": self.name, "type": "connection", "ip": self.bind_ip, "username": "",
+                "password": "", "command": ""}
         self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s" % (self.name, self.ports, self.bind_ip))
         try:

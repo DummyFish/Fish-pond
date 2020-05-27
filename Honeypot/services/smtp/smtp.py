@@ -35,7 +35,8 @@ class SMTPChannel(smtpd.SMTPChannel):
 
 def send_log_command(logs, ip, command):
     now = datetime.now()
-    info = {"time": now, "service": "smtp", "type": "command", "ip": ip, "command": command}
+    info = {"time": now, "service": "smtp", "type": "command", "ip": ip, "username": "",
+            "password": "", "command": command}
     logs.put(info)
 
 
@@ -50,7 +51,8 @@ class fakeServer(DebuggingServer):
 
     def handle_accepted(self, conn, addr):
         now = datetime.now()
-        info = {"time": now, "service": "smtp", "type": "connection", "ip": addr[0]}
+        info = {"time": now, "service": "smtp", "type": "connection", "ip": addr[0], "username": "",
+                "password": "", "command": ""}
         self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % ("smtp", self.port, addr[0], addr[1]))
         channel = self.channel_class(self, conn, addr, self.data_size_limit, self._map, self.enable_SMTPUTF8,

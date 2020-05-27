@@ -25,7 +25,8 @@ def handle_connection(client_socket, logger, logs, ip):
         logger.info("username: " + username)
     logger.info("receive data: " + encode_data)
     now = datetime.now()
-    info = {"time": now, "service": "rdp", "type": "login", "ip": ip, "username": username}
+    info = {"time": now, "service": "rdp", "type": "login", "ip": ip, "username": username,
+            "password": "", "command": ""}
     logs.put(info)
     client_socket.send(b"0x00000004 RDP_NEG_FAILURE")
     client_socket.shutdown(socket.SHUT_RDWR)
@@ -55,7 +56,8 @@ class RDP(Service):
 
     def connection_response(self, client_socket, port, ip, remote_port):
         now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "",
+                "password": "", "command": ""}
         self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         client_socket.settimeout(30)
