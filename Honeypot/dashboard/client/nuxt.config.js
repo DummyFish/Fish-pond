@@ -53,8 +53,39 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
-  auth: {},
+  axios: {
+    baseURL: 'http://localhost:5000/'
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/api/auth/login',
+            method: 'post',
+            propertyName: 'token'
+          },
+          user: {
+            url: 'api/auth/user',
+            method: 'get',
+            propertyName: false
+          },
+          logout: { url: '/api/auth/logout', method: 'delete' }
+        },
+        // autoFetchUser: false,
+        // tokenRequired: true,
+        tokenType: '',
+        cookie: false
+      }
+    },
+    redirect: {
+      login: '/login',
+      logout: '/login'
+    }
+  },
+  router: {
+    middleware: ['auth']
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

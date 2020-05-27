@@ -3,7 +3,7 @@
     <v-row>
       <v-col :cols="9">
         <v-card class="ma-6 pa-6 mt-0">
-          <v-text class="display-2 pl-7">Attack attempt count</v-text>
+          <v-card-text class="display-2 pl-7">Attack attempt count</v-card-text>
           <v-container fluid>
             <v-row dense>
               <v-col v-for="item in items" :key="item.id" :cols="3">
@@ -18,9 +18,9 @@
           </v-container>
         </v-card>
         <v-card class="ma-6 pa-6 mt-0">
-          <v-text class="display-2 pl-7">
+          <v-card-text class="display-2 pl-7">
             Total attack counts in last 10 days
-          </v-text>
+          </v-card-text>
           <v-card-text>
             <v-sheet color="rgba(0, 0, 0, .12)">
               <v-sparkline

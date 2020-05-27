@@ -29,7 +29,8 @@ export const state = () => ({
     pop3: '#A979A9',
     honeypot: '#9C9C9A'
   },
-  gitRepo: 'https://github.com/DummyFish/Fish-pond'
+  gitRepo: 'https://github.com/DummyFish/Fish-pond',
+  password: ''
 })
 
 export const mutations = {
@@ -43,6 +44,10 @@ export const mutations = {
 
   updateServicesConfigration(state, config) {
     state.servicesConfig.services[config.index][config.type] = config.payload
+  },
+
+  changePassword(state, newPswd) {
+    state.password = newPswd
   }
 }
 
