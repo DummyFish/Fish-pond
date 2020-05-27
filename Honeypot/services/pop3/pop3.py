@@ -8,24 +8,21 @@ from services import origin_service
 
 class POP3protocal:
     def __init__(self, server_socket):
-        self.login = False
         self.server_socket = server_socket
+        self.auth = False
 
-    def autheticate(self, user, password, auth):
-        self.server_socket.send('invalid credential, please try again\n'.encode())
-        self.server_socket.shutdown(SHUT_RDWR)
-        self.server_socket.close()
-        auth = True
+    def autheticate(self, user, password):
+        self.server_socket.send('welcome\n'.encode())
+        self.auth = True
 
     def interact(self, incomedata):
-        return 'Fail'
+        logger.info("received command: " + incomedata)
+        return 'commend ' + incomedata + ' not found please try again '
 
 
 def POP3server_thread(client_socket, logger, logs, ip):
     client_socket.send('* OK POP Service is ready\n'.encode())
-    auth = False
     try:
-        # while not auth:
         client_socket.send(b"please enter username:")
         username = str(client_socket.recv(1024), "utf-8").replace("\n", "").replace("\r", "")
         client_socket.send(b"please enter password:")
@@ -34,19 +31,19 @@ def POP3server_thread(client_socket, logger, logs, ip):
         info = {"time": now, "service": "pop3", "type": "login", "ip": ip, "username": username,
                 "password": password}
         logs.put(info)
-        logger.info("New login -  - username: " + username + " - - " + "password: " + password)
+        logger.info("New login - - username: " + username + " - - " + "password: " + password)
         manager = POP3protocal(client_socket)
-        manager.autheticate(username, password, auth)
+        manager.autheticate(username, password)
 
-    # try:
-    #     while 1:
-    #         incomingData = str(client_socket.recv(1024), "utf-8")
-    #         if not incomingData:
-    #             break
-    #         outgoingData = manager.interact(incomingData)
-    #         if not outgoingData:
-    #             break
-    #         client_socket.send(bytes(outgoingData + "\n", "utf-8"))
+
+        while 1:
+            incomingData =  str(client_socket.recv(1024), "utf-8").replace("\n", "").replace("\r", "")
+            if not incomingData:
+                break
+            outgoingData = manager.interact(incomingData, logger)
+            if not outgoingData:
+                break
+            client_socket.send(bytes(outgoingData + "\n", "utf-8"))
     except KeyboardInterrupt:
         client_socket.shutdown(SHUT_RDWR)
         client_socket.close()

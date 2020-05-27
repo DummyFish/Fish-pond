@@ -34,8 +34,8 @@ def TFTPserver_thread(client_socket, logger):
 
 
 class TFTP(origin_service.Service):
-    def __init__(self, bind_ip, ports, log_filepath, name):
-        super().__init__(bind_ip, ports, log_filepath, name)
+    def __init__(self, bind_ip, ports, log_filepath, name, logs):
+        super().__init__(bind_ip, ports, log_filepath, name,logs)
         self.service_start()
 
     def service_start(self):

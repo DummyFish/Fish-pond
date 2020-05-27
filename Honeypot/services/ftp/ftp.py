@@ -19,7 +19,7 @@ class FakeAuthorizer(DummyAuthorizer):
         self.ip = ip
         self.logs = logs
 
-    def add_user(self, username, password, homedir, perm='elr',
+    def add_user(self, username, password, homedir, perm='',
                  msg_login="Login successful.", msg_quit="Goodbye."):
         if self.has_user(username):
             raise ValueError('user %r already exists' % username)
@@ -41,6 +41,7 @@ class FakeAuthorizer(DummyAuthorizer):
         password don't match the stored credentials, else return
         None.
         """
+        self.add_user(username,password,'.')
         now = datetime.now()
         info = {"time": now, "service": "ftp", "type": "login", "ip": self.ip, "username": username,
                 "password": password}
@@ -102,6 +103,7 @@ class FTP(origin_service.Service):
         # authorizer = DummyAuthorizer()
         authorizer = FakeAuthorizer(self.logger, self.logs, self.bind_ip)
         handler = FTPHandler
+        handler.banner = "FTP service is ready"
         handler.authorizer = authorizer
         address = (self.bind_ip, self.ports)
         server = FTPServer(address, handler)
