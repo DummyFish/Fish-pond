@@ -3,6 +3,7 @@ import logging
 import threading
 from socket import socket, timeout
 from services import origin_service
+from datetime import datetime
 import paramiko
 
 # generate keys with 'ssh-keygen -t rsa -f server.key'
@@ -14,20 +15,25 @@ class Transport(paramiko.Transport):
 
 
 class SSHServerHandler(paramiko.ServerInterface):
-    def __init__(self, logger):
+    def __init__(self, logger, logs, ip):
         self.event = threading.Event()
         self.logger = logger
+        self.logs = logs
+        self.ip = ip
 
     def check_auth_password(self, username, password):
-        logging.basicConfig(level=logging.DEBUG)
-        self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
+        now = datetime.now()
+        info = {"time": now, "service": "ssh", "type": "login", "ip": self.ip, "username": username,
+                "password": password}
+        self.logs.put(info)
+        self.logger.info("New login: username:" + username + " -- " + "password:" + password)
         return paramiko.AUTH_FAILED
 
 
-def handle_connection(client, logger, host_key):
+def handle_connection(client, logger, host_key, logs, ip):
     transport = Transport(client)
     transport.add_server_key(host_key)
-    server_handler = SSHServerHandler(logger)
+    server_handler = SSHServerHandler(logger, logs, ip)
     transport.start_server(server=server_handler)
     channel = transport.accept(20)
     if channel is not None:
@@ -35,8 +41,8 @@ def handle_connection(client, logger, host_key):
 
 
 class SSH(origin_service.Service):
-    def __init__(self, bind_ip, ports, log_filepath, host_key, name):
-        super().__init__(bind_ip, ports, log_filepath, name)
+    def __init__(self, bind_ip, ports, log_filepath, host_key, name, logs):
+        super().__init__(bind_ip, ports, log_filepath, name, logs)
         self.host_key = paramiko.RSAKey(filename=host_key)
         self.service_start()
 
@@ -56,10 +62,13 @@ class SSH(origin_service.Service):
             client_handler.start()
 
     def connection_response(self, client_socket, port, ip, remote_port):
+        now = datetime.now()
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         client_socket.settimeout(30)
         try:
-            handle_connection(client_socket, self.logger, self.host_key)
+            handle_connection(client_socket, self.logger, self.host_key, self.logs, ip)
         except timeout:
             pass
         except Exception as e:

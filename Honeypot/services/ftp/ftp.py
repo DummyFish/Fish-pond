@@ -1,8 +1,7 @@
 import sys
 import os
-import logging
-import threading
 from pathlib import Path
+from datetime import datetime
 from socket import socket, timeout
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
@@ -10,11 +9,15 @@ from pyftpdlib.servers import FTPServer
 from services import origin_service
 
 sys.path.append('..')
+
+
 class FakeAuthorizer(DummyAuthorizer):
-    def __init__(self,logger):
+    def __init__(self, logger, logs, ip):
         super().__init__()
         self.user_table = {}
         self.logger = logger
+        self.ip = ip
+        self.logs = logs
 
     def add_user(self, username, password, homedir, perm='elr',
                  msg_login="Login successful.", msg_quit="Goodbye."):
@@ -33,12 +36,15 @@ class FakeAuthorizer(DummyAuthorizer):
                }
         self.user_table[username] = dic
 
-
     def validate_authentication(self, username, password, handler):
         """Raises AuthenticationFailed if supplied username and
         password don't match the stored credentials, else return
         None.
         """
+        now = datetime.now()
+        info = {"time": now, "service": "ftp", "type": "login", "ip": self.ip, "username": username,
+                "password": password}
+        self.logs.put(info)
         self.logger.info("New login -  - username:" + username + " - - " + "password:" + password)
 
     def get_home_dir(self, username):
@@ -48,7 +54,7 @@ class FakeAuthorizer(DummyAuthorizer):
         the provided username no longer exists.
         """
         return "."
-    
+
     def impersonate_user(self, username, password):
         """Impersonate another user (noop).
         It is always called before accessing the filesystem.
@@ -84,8 +90,8 @@ class FakeAuthorizer(DummyAuthorizer):
 # restrain permission
 # 
 class FTP(origin_service.Service):
-    def __init__(self, bind_ip, ports, log_filepath, name):
-        super().__init__(bind_ip, ports, log_filepath, name)
+    def __init__(self, bind_ip, ports, log_filepath, name, logs):
+        super().__init__(bind_ip, ports, log_filepath, name, logs)
         self.service_start()
 
     def service_start(self):
@@ -93,15 +99,18 @@ class FTP(origin_service.Service):
         self.start_listen()
 
     def start_listen(self):
-        #authorizer = DummyAuthorizer()
-        authorizer = FakeAuthorizer(self.logger)
+        # authorizer = DummyAuthorizer()
+        authorizer = FakeAuthorizer(self.logger, self.logs, self.bind_ip)
         handler = FTPHandler
         handler.authorizer = authorizer
-        address = (self.bind_ip,self.ports)
-        server = FTPServer(address,handler)
+        address = (self.bind_ip, self.ports)
+        server = FTPServer(address, handler)
         handler.timeout = 600
         server.max_cons = 256
         server.max_cons_per_ip = 5
+        now = datetime.now()
+        info = {"time": now, "service": self.name, "type": "connection", "ip": self.bind_ip}
+        self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s" % (self.name, self.ports, self.bind_ip))
         try:
             server.serve_forever()
@@ -111,5 +120,3 @@ class FTP(origin_service.Service):
             pass
         except KeyboardInterrupt:
             print('Detected interruption, terminating...')
-
-

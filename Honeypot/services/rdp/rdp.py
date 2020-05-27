@@ -1,5 +1,6 @@
 import socket
 import threading
+from datetime import datetime
 from socket import timeout
 from services.origin_service import Service
 from base64 import b64encode
@@ -14,7 +15,7 @@ def extract_username(data):
     return None
 
 
-def handle_connection(client_socket, logger):
+def handle_connection(client_socket, logger, logs, ip):
     data = client_socket.recv(4096)
     length = str(len(data))
     encode_data = b64encode(data).decode("utf-8")
@@ -23,6 +24,9 @@ def handle_connection(client_socket, logger):
     if username:
         logger.info("username: " + username)
     logger.info("receive data: " + encode_data)
+    now = datetime.now()
+    info = {"time": now, "service": "rdp", "type": "login", "ip": ip, "username": username}
+    logs.put(info)
     client_socket.send(b"0x00000004 RDP_NEG_FAILURE")
     client_socket.shutdown(socket.SHUT_RDWR)
     client_socket.close()
@@ -30,8 +34,8 @@ def handle_connection(client_socket, logger):
 
 
 class RDP(Service):
-    def __init__(self, bind_ip, ports, log_filepath, name):
-        super().__init__(bind_ip, ports, log_filepath, name)
+    def __init__(self, bind_ip, ports, log_filepath, name, logs):
+        super().__init__(bind_ip, ports, log_filepath, name, logs)
         self.service_start()
 
     def service_start(self):
@@ -50,10 +54,13 @@ class RDP(Service):
             client_handler.start()
 
     def connection_response(self, client_socket, port, ip, remote_port):
+        now = datetime.now()
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         client_socket.settimeout(30)
         try:
-            handle_connection(client_socket, self.logger)
+            handle_connection(client_socket, self.logger, self.logs, ip)
         except timeout:
             print('timeout, terminating...')
             pass

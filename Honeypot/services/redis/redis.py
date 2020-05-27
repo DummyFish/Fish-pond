@@ -1,20 +1,24 @@
 import fakeredis
 from services.origin_service import Service
 import threading
+from datetime import datetime
 from socket import socket, timeout, AF_INET, SOCK_STREAM, SHUT_RDWR
 
 
 class RedisServer(object):
-    def __init__(self, socket, logger, name, port):
+    def __init__(self, socket, logger, name, port, logs, ip):
         self.socket = socket
         self.logger = logger
         self.command = ['get', 'set', 'config', 'quit', 'ping', 'del', "save"]
         self.name = name
         self.port = port
+        self.ip = ip
+        self.logs = logs
         self.r = fakeredis.FakeStrictRedis()
 
     def data_received(self, rcvdata):
         command = rcvdata
+        send_log_command(self.logs, self.ip, command)
         position = command.find('\n')
         if position == 0:
             pass
@@ -77,8 +81,14 @@ class RedisServer(object):
                 self.socket.send(msg)
 
 
-def handle_connection(client_socket, logger, name, port):
-    manager = RedisServer(client_socket, logger, name, port)
+def send_log_command(logs, ip, command):
+    now = datetime.now()
+    info = {"time": now, "service": "redis", "type": "command", "ip": ip, "command": command}
+    logs.put(info)
+
+
+def handle_connection(client_socket, logger, name, port, logs, ip):
+    manager = RedisServer(client_socket, logger, name, port, logs, ip)
     while True:
         msg = "redis 127.0.0.1:" + str(port) + " > "
         client_socket.send(msg.encode())
@@ -92,8 +102,8 @@ def handle_connection(client_socket, logger, name, port):
 
 
 class Redis(Service):
-    def __init__(self, bind_ip, ports, log_filepath, name):
-        super().__init__(bind_ip, ports, log_filepath, name)
+    def __init__(self, bind_ip, ports, log_filepath, name, logs):
+        super().__init__(bind_ip, ports, log_filepath, name, logs)
         self.service_start()
 
     def service_start(self):
@@ -109,9 +119,12 @@ class Redis(Service):
             self.connection_response(client, self.ports, addr[0], addr[1])
 
     def connection_response(self, client_socket, port, ip, remote_port):
+        now = datetime.now()
+        info = {"time": now, "service": self.name, "type": "connection", "ip": ip}
+        self.logs.put(info)
         self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         try:
-            handle_connection(client_socket, self.logger, self.name, self.ports)
+            handle_connection(client_socket, self.logger, self.name, self.ports, self.logs, ip)
         except timeout:
             print('timeout, terminating...')
             pass
