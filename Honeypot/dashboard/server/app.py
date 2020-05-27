@@ -70,6 +70,7 @@ def create_app():
 
     @app.route('/api/auth/logout', methods=['DELETE'])
     def logout():
+        deactivate_session('default')
         return jsonify({ 'authenticated': False }), 200
 
     @require_authenticate
