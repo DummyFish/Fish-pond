@@ -21,6 +21,8 @@ Youtube video: https://www.youtube.com/watch?v=Qe9sJbe75Sk
 ## milestone3
 meeting notes: https://docs.google.com/document/d/129708LNvaMNg1aF7WlJIeO7gTNqcpzg-Es98XQhOdlA/edit?usp=sharing
 
+Youtube video: https://www.youtube.com/watch?v=mDzPBTr2Wzs&from=groupmessage&feature=share&isappinstalled=0&app=desktop
+
 
 Yizhi Huang Design Document: https://drive.google.com/file/d/1rN2ElAgk1Akwy_L4WxKDD-2MrDrZ9RBH/view?usp=sharing
 
