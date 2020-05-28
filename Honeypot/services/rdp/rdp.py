@@ -26,7 +26,7 @@ def handle_connection(client_socket, logger, logs, ip):
     logger.info("receive data: " + encode_data)
     now = datetime.now()
     info = {"time": now, "service": "rdp", "type": "login", "ip": ip, "username": username,
-            "password": "", "command": ""}
+            "password": "", "command": encode_data}
     logs.put(info)
     client_socket.send(b"0x00000004 RDP_NEG_FAILURE")
     client_socket.shutdown(socket.SHUT_RDWR)
