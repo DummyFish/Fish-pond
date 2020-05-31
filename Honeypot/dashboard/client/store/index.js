@@ -30,35 +30,70 @@ export const state = () => ({
     honeypot: '#9C9C9A'
   },
   gitRepo: 'https://github.com/DummyFish/Fish-pond',
-  password: ''
+  password: '',
+  logs: [],
+  trendData: null
 })
 
 export const mutations = {
-  invertAccessGranted(state) {
+  INVERT_ACCESS_GRANTED(state) {
     state.accessGranted = !state.accessGranted
   },
 
-  changeServicesDataStats(state, stats) {
+  CHANGE_SERVICES_DATA_STATS(state, stats) {
     state.serviceDataStats = stats
   },
 
-  updateServicesConfigration(state, config) {
+  UPDATE_SERVICES_CONFIGRATION(state, config) {
     state.servicesConfig.services[config.index][config.type] = config.payload
   },
 
-  changePassword(state, newPswd) {
+  CHANGE_PASSWORD(state, newPswd) {
     state.password = newPswd
+  },
+
+  SET_LOGS(state, payload) {
+    state.logs = payload
+  },
+
+  SET_TREND(state, payload) {
+    state.trendData = payload
+  },
+
+  UPDATE_LOGS(state, newLogs) {
+    for (const log in newLogs) {
+      state.logs.pop()
+      state.logs.unshift(log)
+    }
   }
 }
 
 export const actions = {
-  async FETCH_SERVICES_DATA({ commit }) {
-    const data = await this.$axios.$get('/api/stats')
-    commit('changeServicesDataStats', data)
+  async fetch_init_data({ commit }) {
+    let data = await this.$axios.$get('/api/stats')
+    commit('CHANGE_SERVICES_DATA_STATS', data)
+    data = await this.$axios.$get('/api/logs')
+    commit('SET_LOGS', data)
+    data = await this.$axios.$get('/api/trend')
+    commit('SET_TREND', data)
   },
 
-  UPDATE_SERVICES_CONFIGRATION({ commit }, config) {
-    commit('updateServicesConfigration', config)
+  // async FETCH_LOGS({ commit }) {
+  //   const data = await this.$axios.$get('/api/logs')
+  //   commit('SET_LOGS', data)
+  // },
+
+  async update_logs({ commit }) {
+    const data = await this.$axios.$get('/api/update')
+    commit('UPDATE_LOGS', data)
+  },
+
+  async reset() {
+    await this.$axios.$post('/api/reset')
+  },
+
+  update_services_configration({ commit }, config) {
+    commit('UPDATE_SERVICES_CONFIGRATION', config)
   }
 }
 

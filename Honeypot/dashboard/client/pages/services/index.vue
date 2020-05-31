@@ -41,6 +41,8 @@
                     @click:append-outer="toggleServiceStatus(null)"
                   ></v-text-field>
                   <v-spacer></v-spacer>
+                  <v-btn color="error" @click="resetAll">RESET ALL</v-btn>
+                  <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -119,7 +121,7 @@ export default {
       //   console.log(`update ${index} ${value} ${event}`);
       //   this.$store.commit('update', { index, value })
       const payload = this.services[index].status === 0 ? 1 : 0
-      this.$store.dispatch('UPDATE_SERVICES_CONFIGRATION', {
+      this.$store.dispatch('update_services_configration', {
         index,
         payload,
         type: 'status'
@@ -130,6 +132,9 @@ export default {
     },
     switchLabel(num) {
       return num === 1 ? 'Running' : 'Offline'
+    },
+    resetAll() {
+      this.$store.dispatch('reset')
     }
   }
 }

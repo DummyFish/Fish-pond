@@ -1,6 +1,7 @@
 import os
 import signal
 from flask import Flask, request, jsonify, json
+# from flask_socketio import SocketIO, emit
 from functools import wraps
 from flask_cors import CORS
 from datetime import datetime, timedelta
@@ -15,6 +16,7 @@ def keyboardInterruptHandler(signal, frame):
 def create_app():
     signal.signal(signal.SIGINT, keyboardInterruptHandler)
     app = Flask(__name__)
+    # socketio = SocketIO(app)
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     def require_authenticate(f):
@@ -88,8 +90,40 @@ def create_app():
         reset_user_password(data['data'])
         return jsonify({ 'authenticated': False }), 200
 
+    @require_authenticate
+    @app.route('/api/update', methods=['GET'])
+    def fetch_new_logs():
+        return jsonify({})
+    
+    @require_authenticate
+    @app.route('/api/stats', methods=['GET'])
+    def fetch_stats():
+        return jsonify({})
+    
+    @require_authenticate
+    @app.route('/api/logs', methods=['GET'])
+    def fetch_logs():
+        return jsonify({})
+
+    @require_authenticate
+    @app.route('/api/trend', methods=['GET'])
+    def fetch_logs():
+        return jsonify({})
+    
+    @require_authenticate
+    @app.route('/api/trend', methods=['GET'])
+    def fetch_logs():
+        return jsonify({})
+
+    # @socketio.on('connect')
+    # def test_connect():
+    #     emit('after connect',  {'data':'Lets dance'})
+
     return app
 
 
 if __name__ == '__main__':
+    # socketio = None
+    # app = create_app(socketio)
+    # socketio.run(app)
     create_app()
