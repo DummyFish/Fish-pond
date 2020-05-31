@@ -21,11 +21,10 @@
                     persistent-hint
                     :append-outer-icon="'mdi-check-bold'"
                     :hint="'Service Port #'"
-                    :placeholder="`${honeypot.ip}`"
                     :input-value="honeypot.ip"
                     :rules="[rules.ip]"
                     label="IP address"
-                    @click:append-outer="toggleServiceStatus(null)"
+                    @click:append-outer="toggleHoneypotConfig('ip')"
                   ></v-text-field>
                   <v-spacer></v-spacer>
                   <v-text-field
@@ -34,12 +33,13 @@
                     persistent-hint
                     :append-outer-icon="'mdi-check-bold'"
                     :hint="'Log File Path'"
-                    :placeholder="`${honeypot.path}`"
                     :input-value="honeypot.path"
                     :rules="[rules.path]"
                     label="Log File Path"
-                    @click:append-outer="toggleServiceStatus(null)"
+                    @click:append-outer="toggleHoneypotConfig('path')"
                   ></v-text-field>
+                  <v-spacer></v-spacer>
+                  <v-btn color="error" @click="resetAll">RESET ALL</v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
@@ -68,11 +68,10 @@
                     persistent-hint
                     :append-outer-icon="'mdi-check-bold'"
                     :hint="'Service Port #'"
-                    :placeholder="`${service.port}`"
                     :input-value="service.port"
                     :rules="[rules.port]"
                     label="Port"
-                    @click:append-outer="toggleServiceStatus(null)"
+                    @click:append-outer="toggleServicePort(index)"
                   ></v-text-field>
                   <v-spacer></v-spacer>
                 </v-card-actions>
@@ -119,10 +118,27 @@ export default {
       //   console.log(`update ${index} ${value} ${event}`);
       //   this.$store.commit('update', { index, value })
       const payload = this.services[index].status === 0 ? 1 : 0
-      this.$store.dispatch('UPDATE_SERVICES_CONFIGRATION', {
+      // const serviceId = this.services[index].id
+      this.$store.dispatch('update_services_configration', {
         index,
         payload,
         type: 'status'
+      })
+    },
+    toggleServicePort(index) {
+      const payload = this.services[index].port
+      // const serviceId = this.services[index].id
+      this.$store.dispatch('update_services_configration', {
+        index,
+        payload,
+        type: 'port'
+      })
+    },
+    toggleHoneypotConfig(type) {
+      const payload = this.honeypot[type]
+      this.$store.dispatch('update_honeypot_configration', {
+        payload,
+        type
       })
     },
     booleanMapping(num) {
@@ -130,6 +146,9 @@ export default {
     },
     switchLabel(num) {
       return num === 1 ? 'Running' : 'Offline'
+    },
+    resetAll() {
+      this.$store.dispatch('reset')
     }
   }
 }

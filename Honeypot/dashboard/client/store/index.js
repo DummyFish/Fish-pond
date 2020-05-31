@@ -2,21 +2,8 @@ export const state = () => ({
   accessGranted: false,
   serviceDataStats: null,
   servicesConfig: {
-    services: [
-      { id: 'ssh', status: 1, port: 22 },
-      { id: 'ftp', status: 1, port: 21 },
-      { id: 'rdp', status: 1, port: 3390 },
-      { id: 'redis', status: 1, port: 6379 },
-      { id: 'smtp', status: 1, port: 25 },
-      { id: 'telnet', status: 1, port: 23 },
-      { id: 'tftp', status: 1, port: 69 },
-      { id: 'pop3', status: 1, port: 995 }
-    ],
-    honeypot: {
-      id: 'honeypot',
-      path: '../logfile.log',
-      ip: '0.0.0.0'
-    }
+    services: [],
+    honeypot: {}
   },
   servicesColorMapping: {
     ssh: '#AE6A6A',
@@ -30,35 +17,128 @@ export const state = () => ({
     honeypot: '#9C9C9A'
   },
   gitRepo: 'https://github.com/DummyFish/Fish-pond',
-  password: ''
+  password: '',
+  logs: [],
+  trendData: null
 })
 
+// services: [
+//   { id: 'ssh', status: 1, port: 22 },
+//   { id: 'ftp', status: 1, port: 21 },
+//   { id: 'rdp', status: 1, port: 3390 },
+//   { id: 'redis', status: 1, port: 6379 },
+//   { id: 'smtp', status: 1, port: 25 },
+//   { id: 'telnet', status: 1, port: 23 },
+//   { id: 'tftp', status: 1, port: 69 },
+//   { id: 'pop3', status: 1, port: 995 }
+// ],
+// honeypot: {
+//   id: 'honeypot',
+//   path: '../logfile.log',
+//   ip: '0.0.0.0'
+// }
+
 export const mutations = {
-  invertAccessGranted(state) {
+  INVERT_ACCESS_GRANTED(state) {
     state.accessGranted = !state.accessGranted
   },
 
-  changeServicesDataStats(state, stats) {
+  CHANGE_SERVICES_DATA_STATS(state, stats) {
     state.serviceDataStats = stats
   },
 
-  updateServicesConfigration(state, config) {
+  UPDATE_SERVICES_CONFIGRATION(state, config) {
     state.servicesConfig.services[config.index][config.type] = config.payload
   },
 
-  changePassword(state, newPswd) {
+  CHANGE_PASSWORD(state, newPswd) {
     state.password = newPswd
+  },
+
+  SET_LOGS(state, payload) {
+    state.logs = payload
+  },
+
+  SET_TREND(state, payload) {
+    state.trendData = payload
+  },
+
+  UPDATE_LOGS(state, newLogs) {
+    for (const log in newLogs) {
+      state.logs.pop()
+      state.logs.unshift(log)
+    }
+  },
+
+  SET_CONFIG(state, payload) {
+    state.servicesConfig.services = payload
+  },
+
+  SET_HONEYPOT_CONFIG(state, payload) {
+    state.servicesConfig.honeypot = payload
+  },
+
+  UPDATE_HONEYPOT_CONFIG(state, config) {
+    state.servicesConfig.honeypot[config.type] = config.payload
   }
 }
 
 export const actions = {
-  async FETCH_SERVICES_DATA({ commit }) {
-    const data = await this.$axios.$get('/api/stats')
-    commit('changeServicesDataStats', data)
+  async fetch_init_data({ commit }) {
+    let data = await this.$axios.$get('/api/stats')
+    commit('CHANGE_SERVICES_DATA_STATS', data)
+    data = await this.$axios.$get('/api/logs')
+    commit('SET_LOGS', data)
+    data = await this.$axios.$get('/api/trend')
+    commit('SET_TREND', data)
   },
 
-  UPDATE_SERVICES_CONFIGRATION({ commit }, config) {
-    commit('updateServicesConfigration', config)
+  // async FETCH_LOGS({ commit }) {
+  //   const data = await this.$axios.$get('/api/logs')
+  //   commit('SET_LOGS', data)
+  // },
+
+  async update_logs({ commit }) {
+    const data = await this.$axios.$get('/api/update')
+    commit('UPDATE_LOGS', data)
+  },
+
+  async reset() {
+    await this.$axios.$post('/api/reset')
+  },
+
+  async fetch_config({ commit }) {
+    const data = await this.$axios.$get('/api/config')
+    commit('SET_CONFIG', data)
+  },
+
+  async fetch_honeypot_config({ commit }) {
+    const data = await this.$axios.$get('/api/honeypot')
+    commit('SET_HONEYPOT_CONFIG', data)
+  },
+
+  async update_services_configration({ commit }, config) {
+    await this.$axios
+      .post('/api/config', config)
+      .then(function(response) {
+        console.log(response)
+        commit('UPDATE_SERVICES_CONFIGRATION', config)
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+  },
+
+  async update_honeypot_configration({ commit }, config) {
+    await this.$axios
+      .post('/api/honeypot', config)
+      .then(function(response) {
+        console.log(response)
+        commit('UPDATE_HONEYPOT_CONFIG', config)
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
   }
 }
 

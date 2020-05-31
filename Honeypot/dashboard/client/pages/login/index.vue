@@ -63,6 +63,7 @@ export default {
         // this.$auth.setToken('local', 'Bearer ' + response.data.token)
         // console.log(response)
         // console.log(this.$auth.loggedIn)
+        this.$store.dispatch('fetch_init_data')
       } catch (err) {
         // console.log(err)
         this.showSnackbar = true
