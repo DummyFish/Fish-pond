@@ -21,7 +21,6 @@
                     persistent-hint
                     :append-outer-icon="'mdi-check-bold'"
                     :hint="'Service Port #'"
-                    :placeholder="`${honeypot.ip}`"
                     :input-value="honeypot.ip"
                     :rules="[rules.ip]"
                     label="IP address"
@@ -34,7 +33,6 @@
                     persistent-hint
                     :append-outer-icon="'mdi-check-bold'"
                     :hint="'Log File Path'"
-                    :placeholder="`${honeypot.path}`"
                     :input-value="honeypot.path"
                     :rules="[rules.path]"
                     label="Log File Path"
@@ -70,7 +68,6 @@
                     persistent-hint
                     :append-outer-icon="'mdi-check-bold'"
                     :hint="'Service Port #'"
-                    :placeholder="`${service.port}`"
                     :input-value="service.port"
                     :rules="[rules.port]"
                     label="Port"

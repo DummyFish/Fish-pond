@@ -2,21 +2,8 @@ export const state = () => ({
   accessGranted: false,
   serviceDataStats: null,
   servicesConfig: {
-    services: [
-      { id: 'ssh', status: 1, port: 22 },
-      { id: 'ftp', status: 1, port: 21 },
-      { id: 'rdp', status: 1, port: 3390 },
-      { id: 'redis', status: 1, port: 6379 },
-      { id: 'smtp', status: 1, port: 25 },
-      { id: 'telnet', status: 1, port: 23 },
-      { id: 'tftp', status: 1, port: 69 },
-      { id: 'pop3', status: 1, port: 995 }
-    ],
-    honeypot: {
-      id: 'honeypot',
-      path: '../logfile.log',
-      ip: '0.0.0.0'
-    }
+    services: [],
+    honeypot: {}
   },
   servicesColorMapping: {
     ssh: '#AE6A6A',
@@ -34,6 +21,22 @@ export const state = () => ({
   logs: [],
   trendData: null
 })
+
+// services: [
+//   { id: 'ssh', status: 1, port: 22 },
+//   { id: 'ftp', status: 1, port: 21 },
+//   { id: 'rdp', status: 1, port: 3390 },
+//   { id: 'redis', status: 1, port: 6379 },
+//   { id: 'smtp', status: 1, port: 25 },
+//   { id: 'telnet', status: 1, port: 23 },
+//   { id: 'tftp', status: 1, port: 69 },
+//   { id: 'pop3', status: 1, port: 995 }
+// ],
+// honeypot: {
+//   id: 'honeypot',
+//   path: '../logfile.log',
+//   ip: '0.0.0.0'
+// }
 
 export const mutations = {
   INVERT_ACCESS_GRANTED(state) {
