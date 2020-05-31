@@ -93,31 +93,50 @@ def create_app():
     @require_authenticate
     @app.route('/api/update', methods=['GET'])
     def fetch_new_logs():
+        data = request.get_json()
         return jsonify({})
     
     @require_authenticate
     @app.route('/api/stats', methods=['GET'])
     def fetch_stats():
+        data = request.get_json()
         return jsonify({})
     
     @require_authenticate
     @app.route('/api/logs', methods=['GET'])
     def fetch_logs():
+        data = request.get_json()
         return jsonify({})
 
     @require_authenticate
     @app.route('/api/trend', methods=['GET'])
-    def fetch_logs():
+    def fetch_trend():
+        data = request.get_json()
         return jsonify({})
     
     @require_authenticate
-    @app.route('/api/trend', methods=['GET'])
-    def fetch_logs():
+    @app.route('/api/config', methods=['GET'])
+    def fetch_config():
+        data = request.get_json()
         return jsonify({})
 
-    # @socketio.on('connect')
-    # def test_connect():
-    #     emit('after connect',  {'data':'Lets dance'})
+    @require_authenticate
+    @app.route('/api/config', methods=['POST'])
+    def update_config():
+        data = request.get_json()
+        return jsonify({})
+
+    @require_authenticate
+    @app.route('/api/honeypot', methods=['GET'])
+    def fetch_honeypot_config():
+        data = request.get_json()
+        return jsonify({})
+
+    @require_authenticate
+    @app.route('/api/honeypot', methods=['POST'])
+    def update_honeypot_config():
+        data = request.get_json()
+        return jsonify({})
 
     return app
 

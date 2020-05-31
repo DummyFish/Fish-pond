@@ -65,6 +65,18 @@ export const mutations = {
       state.logs.pop()
       state.logs.unshift(log)
     }
+  },
+
+  SET_CONFIG(state, payload) {
+    state.servicesConfig.services = payload
+  },
+
+  SET_HONEYPOT_CONFIG(state, payload) {
+    state.servicesConfig.honeypot = payload
+  },
+
+  UPDATE_HONEYPOT_CONFIG(state, config) {
+    state.servicesConfig.honeypot[config.type] = config.payload
   }
 }
 
@@ -92,8 +104,38 @@ export const actions = {
     await this.$axios.$post('/api/reset')
   },
 
-  update_services_configration({ commit }, config) {
-    commit('UPDATE_SERVICES_CONFIGRATION', config)
+  async fetch_config({ commit }) {
+    const data = await this.$axios.$get('/api/config')
+    commit('SET_CONFIG', data)
+  },
+
+  async fetch_honeypot_config({ commit }) {
+    const data = await this.$axios.$get('/api/honeypot')
+    commit('SET_HONEYPOT_CONFIG', data)
+  },
+
+  async update_services_configration({ commit }, config) {
+    await this.$axios
+      .post('/api/config', config)
+      .then(function(response) {
+        console.log(response)
+        commit('UPDATE_SERVICES_CONFIGRATION', config)
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+  },
+
+  async update_honeypot_configration({ commit }, config) {
+    await this.$axios
+      .post('/api/honeypot', config)
+      .then(function(response) {
+        console.log(response)
+        commit('UPDATE_HONEYPOT_CONFIG', config)
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
   }
 }
 
