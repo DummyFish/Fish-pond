@@ -2,15 +2,15 @@ import configparser
 import queue
 from multiprocessing import Process
 from time import sleep
-from services.smtp.smtp import SMTP
-from services.ssh.ssh import SSH
-from services.ftp.ftp import FTP
-from services.telnet.telnet import Telnet
-from services.rdp.rdp import RDP
-from services.redis.redis import Redis
-from services.pop3.pop3 import POP3
-from services.tftp.tftp import TFTP
-from modify_config import get_config
+from .services.smtp.smtp import SMTP
+from .services.ssh.ssh import SSH
+from .services.ftp.ftp import FTP
+from .services.telnet.telnet import Telnet
+from .services.rdp.rdp import RDP
+from .services.redis.redis import Redis
+from .services.pop3.pop3 import POP3
+from .services.tftp.tftp import TFTP
+from .modify_config import get_config
 import multiprocessing
 import sqlite3
 

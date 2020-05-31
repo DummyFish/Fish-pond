@@ -2,7 +2,7 @@ import sys
 import asyncore
 import smtpd
 from datetime import datetime
-from services import origin_service
+from Honeypot.services import origin_service
 from smtpd import SMTPServer, DebuggingServer
 import asynchat
 

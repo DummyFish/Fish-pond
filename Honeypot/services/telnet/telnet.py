@@ -3,7 +3,7 @@ import logging
 import threading
 from datetime import datetime
 from socket import socket, timeout, SHUT_RDWR
-from services import origin_service
+from Honeypot.services import origin_service
 import telnetlib3
 
 

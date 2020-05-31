@@ -2,7 +2,7 @@ import sys
 import logging
 import threading
 from socket import socket, timeout, AF_INET, SOCK_STREAM, SHUT_RDWR
-from services import origin_service
+from Honeypot.services import origin_service
 
 
 class TFTPprotocal:

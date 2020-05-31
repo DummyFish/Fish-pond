@@ -2,7 +2,7 @@ import sys
 import logging
 import threading
 from socket import socket, timeout
-from services import origin_service
+from Honeypot.services import origin_service
 from datetime import datetime
 import paramiko
 

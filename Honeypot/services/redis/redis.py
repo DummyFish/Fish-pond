@@ -1,5 +1,5 @@
 import fakeredis
-from services.origin_service import Service
+from Honeypot.services.origin_service import Service
 import threading
 from datetime import datetime
 from socket import socket, timeout, AF_INET, SOCK_STREAM, SHUT_RDWR

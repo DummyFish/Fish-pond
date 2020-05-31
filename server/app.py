@@ -1,11 +1,17 @@
 import os
+import sys
 import signal
+
+path = os.getcwd()
+print(os.path.abspath(os.path.join(path, os.pardir)))
+sys.path.append(os.path.abspath(os.path.join(path, os.pardir)))
+
 from flask import Flask, request, jsonify, json
-# from flask_socketio import SocketIO, emit
 from functools import wraps
 from flask_cors import CORS
 from datetime import datetime, timedelta
-from auth import reset_user_password, authenticate, deactivate_session, activate_session
+from .auth import reset_user_password, authenticate, deactivate_session, activate_session
+from .services import start_services, reset_config
 import jwt
 
 def keyboardInterruptHandler(signal, frame):
@@ -145,4 +151,5 @@ if __name__ == '__main__':
     # socketio = None
     # app = create_app(socketio)
     # socketio.run(app)
+    start_services()
     create_app()

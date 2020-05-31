@@ -6,7 +6,7 @@ from socket import socket, timeout
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
-from services import origin_service
+from Honeypot.services import origin_service
 
 sys.path.append('..')
 

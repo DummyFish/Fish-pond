@@ -2,7 +2,7 @@ import socket
 import threading
 from datetime import datetime
 from socket import timeout
-from services.origin_service import Service
+from Honeypot.services.origin_service import Service
 from base64 import b64encode
 import re
 
