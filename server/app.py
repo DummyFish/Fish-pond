@@ -1,23 +1,43 @@
 import os
 import sys
 import signal
-
-path = os.getcwd()
-print(os.path.abspath(os.path.join(path, os.pardir)))
-sys.path.append(os.path.abspath(os.path.join(path, os.pardir)))
-
 from flask import Flask, request, jsonify, json
 from functools import wraps
 from flask_cors import CORS
+from multiprocessing import Process, Queue
 from datetime import datetime, timedelta
-from .auth import reset_user_password, authenticate, deactivate_session, activate_session
-from .services import start_services, reset_config
+import configparser
 import jwt
+
+path = os.getcwd()
+# print(os.path.abspath(os.path.join(path, os.pardir)))
+sys.path.append(os.path.abspath(os.path.join(path, os.pardir)))
+
+from .auth import reset_user_password, authenticate, deactivate_session, activate_session
+# from .services import reset_config
+from Honeypot.modify_config import reset, get_default, get_config
+from Honeypot.checkService import Check
+
+print("Start honeypot")
+config_filepath = "../config.ini"
+configs = configparser.ConfigParser()
+configs.read(config_filepath)
+main_process = None
+states = Queue()
+main_config = get_default(config_filepath)
+service_config = get_config(config_filepath)
+main_process = Process(target=Check, args=(main_config, service_config, config_filepath, states))
+print("Start services...")
+main_process.start()
+print("Done initialization")
 
 def keyboardInterruptHandler(signal, frame):
     print("KeyboardInterrupt (ID: {}) has been caught. Cleaning up...".format(signal))
     deactivate_session('default')
     exit(0)
+
+def reset_config(main_process, states, configs, config_filepath):
+  main_process = reset(main_process, Check, states, configs, config_filepath)
 
 def create_app():
     signal.signal(signal.SIGINT, keyboardInterruptHandler)
@@ -151,5 +171,4 @@ if __name__ == '__main__':
     # socketio = None
     # app = create_app(socketio)
     # socketio.run(app)
-    start_services()
     create_app()
