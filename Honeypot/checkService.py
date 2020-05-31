@@ -10,6 +10,7 @@ from services.rdp.rdp import RDP
 from services.redis.redis import Redis
 from services.pop3.pop3 import POP3
 from services.tftp.tftp import TFTP
+from modify_config import get_config
 import multiprocessing
 import sqlite3
 
@@ -44,11 +45,11 @@ def send_to_sql(database, result):
 
 
 def ssh_start(config, host, log_filepath, logs):
-    ssh_states = config.get('ssh', 'status', raw=True, fallback="0")
+    ssh_states = config['status']
     if ssh_states == "1":
         print("service ssh start")
-        ssh_port = config.get('ssh', 'port', raw=True, fallback="22")
-        host_key = config.get('ssh', 'service_key', raw=True, fallback="../server.key")
+        ssh_port = config['port']
+        host_key = config['key']
         # SSH(host, ssh_port, log_filepath, "ssh")
         ssh_process = Process(target=SSH, args=(host, ssh_port, log_filepath, host_key, "ssh", logs))
         ssh_process.start()
@@ -57,10 +58,10 @@ def ssh_start(config, host, log_filepath, logs):
 
 
 def smtp_start(config, host, log_filepath, logs):
-    smtp_states = config.get('smtp', 'status', raw=True, fallback="0")
+    smtp_states = config['status']
     if smtp_states == "1":
         print("service redis start")
-        smtp_port = config.get('smtp', 'port', raw=True, fallback="2525")
+        smtp_port = config['port']
         # SMTP(host, smtp_port, log_filepath, "smtp")
         smtp_process = Process(target=SMTP, args=(host, smtp_port, log_filepath, "smtp", logs))
         smtp_process.start()
@@ -69,10 +70,10 @@ def smtp_start(config, host, log_filepath, logs):
 
 
 def ftp_start(config, host, log_filepath, logs):
-    ftp_states = config.get('ftp', 'status', raw=True, fallback="0")
+    ftp_states = config['status']
     if ftp_states == "1":
         print("service ftp start")
-        ftp_port = config.get('ftp', 'port', raw=True, fallback="21")
+        ftp_port = config['port']
         ftp_process = Process(target=FTP, args=(host, ftp_port, log_filepath, "ftp", logs))
         ftp_process.start()
         return ftp_process
@@ -80,10 +81,10 @@ def ftp_start(config, host, log_filepath, logs):
 
 
 def telnet_start(config, host, log_filepath, logs):
-    telnet_states = config.get('telnet', 'status', raw=True, fallback="0")
+    telnet_states = config['status']
     if telnet_states == "1":
         print("service telnet start")
-        telnet_port = config.get('telnet', 'port', raw=True, fallback="23")
+        telnet_port = config['port']
         telnet_process = Process(target=Telnet, args=(host, telnet_port, log_filepath, "telnet", logs))
         telnet_process.start()
         return telnet_process
@@ -91,10 +92,10 @@ def telnet_start(config, host, log_filepath, logs):
 
 
 def rdp_start(config, host, log_filepath, logs):
-    rdp_states = config.get('rdp', 'status', raw=True, fallback="0")
+    rdp_states = config['status']
     if rdp_states == "1":
         print("service rdp start")
-        rdp_port = config.get('rdp', 'port', raw=True, fallback="3389")
+        rdp_port = config['port']
         # RDP(host, rdp_port, log_filepath, "rdp")
         rdp_process = Process(target=RDP, args=(host, rdp_port, log_filepath, "rdp", logs))
         rdp_process.start()
@@ -103,10 +104,10 @@ def rdp_start(config, host, log_filepath, logs):
 
 
 def redis_start(config, host, log_filepath, logs):
-    redis_states = config.get('redis', 'status', raw=True, fallback="0")
+    redis_states = config['status']
     if redis_states == "1":
         print("service redis start")
-        redis_port = config.get('redis', 'port', raw=True, fallback="6379")
+        redis_port = config['port']
         # Redis(host, redis_port, log_filepath, "redis")
         redis_process = Process(target=Redis, args=(host, redis_port, log_filepath, "redis", logs))
         redis_process.start()
@@ -115,10 +116,10 @@ def redis_start(config, host, log_filepath, logs):
 
 
 def pop3_start(config, host, log_filepath, logs):
-    pop3_states = config.get('pop3', 'status', raw=True, fallback="0")
+    pop3_states = config['status']
     if pop3_states == "1":
         print("service pop3 start")
-        pop3_port = config.get('pop3', 'port', raw=True, fallback="995")
+        pop3_port = config['port']
         # POP3(host, redis_port, log_filepath, "redis")
         pop3_process = Process(target=POP3, args=(host, pop3_port, log_filepath, "pop3", logs))
         pop3_process.start()
@@ -127,10 +128,10 @@ def pop3_start(config, host, log_filepath, logs):
 
 
 def tftp_start(config, host, log_filepath, logs):
-    tftp_states = config.get('tftp', 'status', raw=True, fallback="0")
+    tftp_states = config['status']
     if tftp_states == "1":
         print("service tftp start")
-        tftp_port = config.get('tftp', 'port', raw=True, fallback="69")
+        tftp_port = config['port']
         # tftp(host, redis_port, log_filepath, "tftp")
         tftp_process = Process(target=TFTP, args=(host, tftp_port, log_filepath, "tftp", logs))
         tftp_process.start()
@@ -139,28 +140,26 @@ def tftp_start(config, host, log_filepath, logs):
 
 
 class Check:
-    def __init__(self, config, sign):
+    def __init__(self, main_config, service_config, config_filepath, sign):
         self.signal = 1
-        self.check(config, sign)
+        self.check(main_config, service_config, config_filepath, sign)
 
-    def check(self, config_filepath, sign):
-        config = configparser.ConfigParser()
-        config.read(config_filepath)
+    def check(self, main_config, service_config, config_filepath, sign):
         try:
-            host = config.get('default', 'host', raw=True, fallback="0.0.0.0")
-            log_filepath = config.get('default', 'logfile', raw=True, fallback="./logfile.log")
+            host = main_config['ip']
+            log_filepath = main_config['path']
             logs = multiprocessing.Queue()
             database = create_db()
             print("service started, check which service is started:")
 
-            ssh_process = ssh_start(config, host, log_filepath, logs)
-            smtp_process = smtp_start(config, host, log_filepath, logs)
-            ftp_process = ftp_start(config, host, log_filepath, logs)
-            telnet_process = telnet_start(config, host, log_filepath, logs)
-            rdp_process = rdp_start(config, host, log_filepath, logs)
-            redis_process = redis_start(config, host, log_filepath, logs)
-            pop3_process = pop3_start(config, host, log_filepath, logs)
-            tftp_process = tftp_start(config, host, log_filepath, logs)
+            ssh_process = ssh_start(service_config['ssh'], host, log_filepath, logs)
+            smtp_process = smtp_start(service_config['smtp'], host, log_filepath, logs)
+            ftp_process = ftp_start(service_config['ftp'], host, log_filepath, logs)
+            telnet_process = telnet_start(service_config['telnet'], host, log_filepath, logs)
+            rdp_process = rdp_start(service_config['rdp'], host, log_filepath, logs)
+            redis_process = redis_start(service_config['redis'], host, log_filepath, logs)
+            pop3_process = pop3_start(service_config['pop3'], host, log_filepath, logs)
+            # tftp_process = tftp_start(service_config['tftp'], host, log_filepath, logs)
 
             print("other")
             while self.signal:
@@ -173,41 +172,35 @@ class Check:
                         pass
                 try:
                     message = sign.get(timeout=0.2)
+                    service_config = get_config(config_filepath)
                     if message == "ssh":
                         if ssh_process is not None:
                             ssh_process.terminate()
-                        config.read(config_filepath)
-                        ssh_process = ssh_start(config, host, log_filepath, logs)
+                        ssh_process = ssh_start(service_config['ssh'], host, log_filepath, logs)
                     if message == "smtp":
                         if ssh_process is not None:
                             ssh_process.terminate()
-                        config.read(config_filepath)
-                        smtp_process = smtp_start(config, host, log_filepath, logs)
+                        smtp_process = smtp_start(service_config['smtp'], host, log_filepath, logs)
                     if message == "ftp":
                         if ssh_process is not None:
                             ssh_process.terminate()
-                        config.read(config_filepath)
-                        ftp_process = ftp_start(config, host, log_filepath, logs)
+                        ftp_process = ftp_start(service_config['ftp'], host, log_filepath, logs)
                     if message == "telnet":
                         if ssh_process is not None:
                             ssh_process.terminate()
-                        config.read(config_filepath)
-                        telnet_process = telnet_start(config, host, log_filepath, logs)
+                        telnet_process = telnet_start(service_config['telnet'], host, log_filepath, logs)
                     if message == "rdp":
                         if ssh_process is not None:
                             ssh_process.terminate()
-                        config.read(config_filepath)
-                        rdp_process = rdp_start(config, host, log_filepath, logs)
+                        rdp_process = rdp_start(service_config['rdp'], host, log_filepath, logs)
                     if message == "redis":
                         if ssh_process is not None:
                             ssh_process.terminate()
-                        config.read(config_filepath)
-                        redis_process = redis_start(config, host, log_filepath, logs)
+                        redis_process = redis_start(service_config['redis'], host, log_filepath, logs)
                     if message == "pop3":
                         if ssh_process is not None:
                             ssh_process.terminate()
-                        config.read(config_filepath)
-                        pop3_process = pop3_start(config, host, log_filepath, logs)
+                        pop3_process = pop3_start(service_config['pop3'], host, log_filepath, logs)
                     if message == 0:
                         raise NormalException
                     else:
