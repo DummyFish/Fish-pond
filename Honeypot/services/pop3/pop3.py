@@ -35,9 +35,8 @@ def POP3server_thread(client_socket, logger, logs, ip):
         manager = POP3protocal(client_socket)
         manager.autheticate(username, password)
 
-
         while 1:
-            incomingData =  str(client_socket.recv(1024), "utf-8").replace("\n", "").replace("\r", "")
+            incomingData = str(client_socket.recv(1024), "utf-8").replace("\n", "").replace("\r", "")
             if not incomingData:
                 break
             outgoingData = manager.interact(incomingData, logger)
@@ -59,12 +58,17 @@ class POP3(origin_service.Service):
         self.start_listen()
 
     def start_listen(self):
-        listener = socket(AF_INET, SOCK_STREAM)
-        listener.bind((self.bind_ip, int(self.ports)))
-        listener.listen(5)
-        while True:
-            client, addr = listener.accept()
-            self.waitforconnection(client, self.ports, addr[0], addr[1])
+        try:
+            listener = socket(AF_INET, SOCK_STREAM)
+            listener.bind((self.bind_ip, int(self.ports)))
+            listener.listen(5)
+            while True:
+                client, addr = listener.accept()
+                self.waitforconnection(client, self.ports, addr[0], addr[1])
+        except OSError:
+            print("service", self.name, "find ports", self.ports, "already in used, please check again")
+            print("close service", self.name)
+            exit()
 
     def waitforconnection(self, client_socket, port, ip, remote_port):
         now = datetime.now()

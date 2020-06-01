@@ -112,27 +112,37 @@ class Redis(Service):
         self.start_listen()
 
     def start_listen(self):
-        listener = socket(AF_INET, SOCK_STREAM)
-        listener.bind((self.bind_ip, int(self.ports)))
-        listener.listen(5)
-        while True:
-            client, addr = listener.accept()
-            self.connection_response(client, self.ports, addr[0], addr[1])
+        try:
+            listener = socket(AF_INET, SOCK_STREAM)
+            listener.bind((self.bind_ip, int(self.ports)))
+            listener.listen(5)
+            while True:
+                client, addr = listener.accept()
+                self.connection_response(client, self.ports, addr[0], addr[1])
+        except OSError:
+            print("service", self.name, "find ports", self.ports, "already in used, please check again")
+            print("close service", self.name)
+            exit()
 
     def connection_response(self, client_socket, port, ip, remote_port):
-        now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "",
-                "password": "", "command": ""}
-        self.logs.put(info)
-        self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
         try:
+            now = datetime.now()
+            info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "",
+                    "password": "", "command": ""}
+            self.logs.put(info)
+            self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
             handle_connection(client_socket, self.logger, self.name, self.ports, self.logs, ip)
         except timeout:
             print('timeout, terminating...')
             pass
+        except OSError:
+            print("service", self.name, "find ports", self.ports, "already in used, please check again")
+            print("close service", self.name)
+            exit()
         except KeyboardInterrupt:
             print('Detected interruption, terminating...')
-            client_socket.close()
+            exit()
         except Exception as e:
+            print(e)
             pass
         client_socket.close()

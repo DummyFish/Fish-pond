@@ -51,27 +51,36 @@ class SSH(origin_service.Service):
         self.start_listen()
 
     def start_listen(self):
-        listener = socket()
-        listener.bind((self.bind_ip, int(self.ports)))
-        listener.listen(5)
-        while True:
-            client, addr = listener.accept()
-            # self.connection_response(client, self.ports, addr[0], addr[1])
-            client_handler = threading.Thread(target=self.connection_response,
-                                              args=(client, self.ports, addr[0], addr[1]))
-            client_handler.start()
+        try:
+            listener = socket()
+            listener.bind((self.bind_ip, int(self.ports)))
+            listener.listen(5)
+            while True:
+                client, addr = listener.accept()
+                # self.connection_response(client, self.ports, addr[0], addr[1])
+                client_handler = threading.Thread(target=self.connection_response,
+                                                  args=(client, self.ports, addr[0], addr[1]))
+                client_handler.start()
+        except OSError:
+            print("service", self.name, "find ports", self.ports, "already in used, please check again")
+            print("close service", self.name)
+            exit()
 
     def connection_response(self, client_socket, port, ip, remote_port):
-        now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "", "password": "",
-                "command": ""}
-        self.logs.put(info)
-        self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
-        client_socket.settimeout(30)
         try:
+            now = datetime.now()
+            info = {"time": now, "service": self.name, "type": "connection", "ip": ip, "username": "", "password": "",
+                    "command": ""}
+            self.logs.put(info)
+            self.logger.info("Connection received to service %s:%d  %s:%d" % (self.name, port, ip, remote_port))
+            client_socket.settimeout(30)
             handle_connection(client_socket, self.logger, self.host_key, self.logs, ip)
         except timeout:
             pass
+        except KeyboardInterrupt:
+            print('Detected interruption, terminating...')
+            exit()
         except Exception as e:
+            print(e)
             pass
         client_socket.close()

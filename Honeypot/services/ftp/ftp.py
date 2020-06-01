@@ -101,25 +101,30 @@ class FTP(origin_service.Service):
 
     def start_listen(self):
         # authorizer = DummyAuthorizer()
-        authorizer = FakeAuthorizer(self.logger, self.logs, self.bind_ip)
-        handler = FTPHandler
-        handler.banner = "FTP service is ready"
-        handler.authorizer = authorizer
-        address = (self.bind_ip, self.ports)
-        server = FTPServer(address, handler)
-        handler.timeout = 600
-        server.max_cons = 256
-        server.max_cons_per_ip = 5
-        now = datetime.now()
-        info = {"time": now, "service": self.name, "type": "connection", "ip": self.bind_ip, "username": "",
-                "password": "", "command": ""}
-        self.logs.put(info)
-        self.logger.info("Connection received to service %s:%d  %s" % (self.name, self.ports, self.bind_ip))
         try:
+            authorizer = FakeAuthorizer(self.logger, self.logs, self.bind_ip)
+            handler = FTPHandler
+            handler.banner = "FTP service is ready"
+            handler.authorizer = authorizer
+            address = (self.bind_ip, self.ports)
+            server = FTPServer(address, handler)
+            handler.timeout = 600
+            server.max_cons = 256
+            server.max_cons_per_ip = 5
+            now = datetime.now()
+            info = {"time": now, "service": self.name, "type": "connection", "ip": self.bind_ip, "username": "",
+                    "password": "", "command": ""}
+            self.logs.put(info)
+            self.logger.info("Connection received to service %s:%d  %s" % (self.name, self.ports, self.bind_ip))
             server.serve_forever()
         except timeout:
             pass
-        except Exception as e:
-            pass
+        except OSError:
+            print("service", self.name, "find ports", self.ports, "already in used, please check again")
+            print("close service", self.name)
+            exit()
         except KeyboardInterrupt:
             print('Detected interruption, terminating...')
+        except Exception as e:
+            print(e)
+            pass

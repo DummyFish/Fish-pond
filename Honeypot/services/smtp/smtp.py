@@ -69,8 +69,16 @@ class SMTP(origin_service.Service):
         self.start_listen()
 
     def start_listen(self):
-        smtp = fakeServer((self.bind_ip, self.ports), None, self.logger, self.ports, self.logs)
         try:
+            smtp = fakeServer((self.bind_ip, self.ports), None, self.logger, self.ports, self.logs)
             asyncore.loop()
+        except OSError:
+            print("service", self.name, "find ports", self.ports, "already in used, please check again")
+            print("close service", self.name)
+            exit()
         except KeyboardInterrupt:
             print('Detected interruption, terminating...')
+            exit()
+        except Exception as e:
+            print(e)
+            pass
