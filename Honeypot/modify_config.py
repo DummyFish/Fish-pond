@@ -58,7 +58,7 @@ def set_config(states, config, config_path, service, option, value):
 
 def reset(process, check, states, config, config_path):
     states.put(0)
-    sleep(2)
+    sleep(3)
     config.set("default", "logfile", "../logfile.log")
     config.set("default", "host", "0.0.0.0")
     config.set("ssh", "status", "1")

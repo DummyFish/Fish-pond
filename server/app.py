@@ -14,42 +14,63 @@ path = os.getcwd()
 sys.path.append(os.path.abspath(os.path.join(path, os.pardir)))
 
 from .auth import reset_user_password, authenticate, deactivate_session, activate_session
+# from .process_data_cache import latest_date, config_filepath, configs, main_config, service_config, main_process, states
 # from .services import reset_config
-from Honeypot.modify_config import reset, get_default, get_config
-from Honeypot.checkService import Check
+# from Honeypot.modify_config import reset, get_default, get_config, set_config
+# from Honeypot.checkService import Check
+# from Honeypot.analysis import check_service_num, get_latest_log
 
-print("Start honeypot")
-config_filepath = "../config.ini"
-configs = configparser.ConfigParser()
-configs.read(config_filepath)
-main_process = None
-states = Queue()
-main_config = get_default(config_filepath)
-service_config = get_config(config_filepath)
-main_process = Process(target=Check, args=(main_config, service_config, config_filepath, states))
-print("Start services...")
-main_process.start()
-print("Done initialization")
+from Honeypot.serverInterface import reset_api, set_config_api, get_logs_api, get_service_stats_api, get_honeypot_config_api, get_service_config_api
+
+# global latest_date
+# global configs
+# global main_process
+# global states
+# global main_config
+# global service_config
+
+# def init_services(latest_date, configs, config_filepath, main_process, states, main_config, service_config):
+#     latest_date = ''
+#     print("Start honeypot")
+#     config_filepath = "../config.ini"
+#     configs = configparser.ConfigParser()
+#     configs.read(config_filepath)
+#     main_process = None
+#     states = Queue()
+#     main_config = get_default(config_filepath)
+#     service_config = get_config(config_filepath)
+#     main_process = Process(target=Check, args=(main_config, service_config, config_filepath, states))
+#     print("Start services...")
+#     main_process.start()
+#     print("Done initialization")
 
 def keyboardInterruptHandler(signal, frame):
     print("KeyboardInterrupt (ID: {}) has been caught. Cleaning up...".format(signal))
     deactivate_session('default')
     exit(0)
 
-def reset_config(main_process, states, configs, config_filepath):
-  main_process = reset(main_process, Check, states, configs, config_filepath)
+# def reset_config(main_process, states, configs, config_filepath):
+#     main_process = reset(main_process, Check, states, configs, config_filepath)
 
 def create_app():
     signal.signal(signal.SIGINT, keyboardInterruptHandler)
     app = Flask(__name__)
-    # socketio = SocketIO(app)
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+    # latest_date = ""
+    # configs = None
+    # config_filepath = "../config.ini"
+    # main_process = None
+    # states = None
+    # main_config = None
+    # service_config = None
+    # init_services(latest_date, configs, config_filepath, main_process, states, main_config, service_config)
 
     def require_authenticate(f):
         @wraps(f)
         def verify_token(*args, **kwds):
-            print(args)
-            print(kwds)
+            # print(args)
+            # print(kwds)
             authHeader = request.headers.get('Authorization', '').split()
             invalid = {
                 'message': 'Invalid',
@@ -65,7 +86,7 @@ def create_app():
             try:
                 token = authHeader[1]
                 data = jwt.decode(token, 'CD26P7ozg2nfEU4ilkhrQp0ChU6iwlhQ')
-                print(data)
+                # print(data)
                 return f(*args, **kwds)
             except jwt.ExpiredSignatureError:
                 deactivate_session('default')
@@ -104,7 +125,7 @@ def create_app():
     @require_authenticate
     @app.route('/api/auth/user')
     def fetch_current_user():
-        print(request)
+        # print(request)
         return jsonify({ 'authenticated': True }), 200
 
     @require_authenticate
@@ -119,20 +140,25 @@ def create_app():
     @require_authenticate
     @app.route('/api/update', methods=['GET'])
     def fetch_new_logs():
-        data = request.get_json()
-        return jsonify({})
+        logs = get_logs_api()
+        return jsonify(logs)
     
     @require_authenticate
     @app.route('/api/stats', methods=['GET'])
     def fetch_stats():
-        data = request.get_json()
-        return jsonify({})
+        # data = request.get_json()
+        data = get_service_stats_api()
+        stats = []
+        for key in data:
+            stats.append(data[key])
+        # print(stats)
+        return jsonify(stats)
     
     @require_authenticate
     @app.route('/api/logs', methods=['GET'])
     def fetch_logs():
-        data = request.get_json()
-        return jsonify({})
+        logs = get_logs_api()
+        return jsonify(logs)
 
     @require_authenticate
     @app.route('/api/trend', methods=['GET'])
@@ -143,32 +169,44 @@ def create_app():
     @require_authenticate
     @app.route('/api/config', methods=['GET'])
     def fetch_config():
-        data = request.get_json()
-        return jsonify({})
+        # data = request.get_json()
+        service_config = get_service_config_api()
+        # print("Services Config: ", service_config)
+        return jsonify(service_config)
 
     @require_authenticate
     @app.route('/api/config', methods=['POST'])
     def update_config():
         data = request.get_json()
+        print(data)
+        serviceName = data['index']
+        configType = data['type']
+        configVal = data['payload']
+        set_config_api(serviceName, configType, configVal)
         return jsonify({})
 
     @require_authenticate
     @app.route('/api/honeypot', methods=['GET'])
     def fetch_honeypot_config():
-        data = request.get_json()
-        return jsonify({})
+        main_config = get_honeypot_config_api()
+        # print("Honeypot Config: ", main_config)
+        return jsonify(main_config)
 
     @require_authenticate
     @app.route('/api/honeypot', methods=['POST'])
     def update_honeypot_config():
         data = request.get_json()
+        # config.set_config(states, configs, config_filepath, "ssh", "port", "2222")
         return jsonify({})
-
+    
+    @require_authenticate
+    @app.route('/api/reset', methods=['POST'])
+    def reset_all():
+        reset_user_password('Pas$W0rd')
+        reset_api()
+        return jsonify({}), 200
     return app
 
 
 if __name__ == '__main__':
-    # socketio = None
-    # app = create_app(socketio)
-    # socketio.run(app)
     create_app()

@@ -1,6 +1,6 @@
 import configparser
 from multiprocessing import Process, Queue
-from modify_config import reset, get_default, get_config
+from modify_config import reset, get_default, get_config, set_config
 from checkService import Check
 
 print("hello")
