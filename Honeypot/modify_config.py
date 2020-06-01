@@ -79,6 +79,8 @@ def reset(process, check, states, config, config_path):
     config.set("tftp", "port", "69")
     config.write(open(config_path, "w"))
     process.close()
-    process = Process(target=check, args=(config_path, states))
+    main_config = get_default(config_path)
+    service_config = get_config(config_path)
+    process = Process(target=check, args=(main_config, service_config, config_path, states))
     process.start()
     return process
