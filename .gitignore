@@ -81,3 +81,5 @@ yarn-error.log*
 #local cache 
 *.pyc
 *.log
+
+/client/node_modules
