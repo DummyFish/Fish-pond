@@ -167,7 +167,7 @@ class Check:
                     try:
                         result = logs.get(timeout=0.2)
                         send_to_sql(database, result)
-                        print('Result:', result)
+                        # print('Result:', result)
                     except queue.Empty:
                         pass
                 try:
@@ -203,8 +203,6 @@ class Check:
                         pop3_process = pop3_start(service_config['pop3'], host, log_filepath, logs)
                     if message == 0:
                         raise NormalException
-                    else:
-                        print("unknown")
                 except queue.Empty:
                     pass
         except NormalException:
