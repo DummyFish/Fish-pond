@@ -10,61 +10,20 @@ import configparser
 import jwt
 
 path = os.getcwd()
-# print(os.path.abspath(os.path.join(path, os.pardir)))
 sys.path.append(os.path.abspath(os.path.join(path, os.pardir)))
 
 from .auth import reset_user_password, authenticate, deactivate_session, activate_session
-# from .process_data_cache import latest_date, config_filepath, configs, main_config, service_config, main_process, states
-# from .services import reset_config
-# from Honeypot.modify_config import reset, get_default, get_config, set_config
-# from Honeypot.checkService import Check
-# from Honeypot.analysis import check_service_num, get_latest_log
-
-from Honeypot.serverInterface import reset_api, set_config_api, get_logs_api, get_service_stats_api, get_honeypot_config_api, get_service_config_api
-
-# global latest_date
-# global configs
-# global main_process
-# global states
-# global main_config
-# global service_config
-
-# def init_services(latest_date, configs, config_filepath, main_process, states, main_config, service_config):
-#     latest_date = ''
-#     print("Start honeypot")
-#     config_filepath = "../config.ini"
-#     configs = configparser.ConfigParser()
-#     configs.read(config_filepath)
-#     main_process = None
-#     states = Queue()
-#     main_config = get_default(config_filepath)
-#     service_config = get_config(config_filepath)
-#     main_process = Process(target=Check, args=(main_config, service_config, config_filepath, states))
-#     print("Start services...")
-#     main_process.start()
-#     print("Done initialization")
+from Honeypot.serverInterface import reset_api, set_config_api, get_logs_api, get_service_stats_api, get_honeypot_config_api, get_service_config_api, get_trend_data_api
 
 def keyboardInterruptHandler(signal, frame):
     print("KeyboardInterrupt (ID: {}) has been caught. Cleaning up...".format(signal))
     deactivate_session('default')
     exit(0)
 
-# def reset_config(main_process, states, configs, config_filepath):
-#     main_process = reset(main_process, Check, states, configs, config_filepath)
-
 def create_app():
     signal.signal(signal.SIGINT, keyboardInterruptHandler)
     app = Flask(__name__)
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
-    # latest_date = ""
-    # configs = None
-    # config_filepath = "../config.ini"
-    # main_process = None
-    # states = None
-    # main_config = None
-    # service_config = None
-    # init_services(latest_date, configs, config_filepath, main_process, states, main_config, service_config)
 
     def require_authenticate(f):
         @wraps(f)
@@ -163,8 +122,8 @@ def create_app():
     @require_authenticate
     @app.route('/api/trend', methods=['GET'])
     def fetch_trend():
-        data = request.get_json()
-        return jsonify({})
+        trendData = get_trend_data_api()
+        return jsonify(trendData)
     
     @require_authenticate
     @app.route('/api/config', methods=['GET'])

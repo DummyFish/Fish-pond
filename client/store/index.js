@@ -19,21 +19,7 @@ export const state = () => ({
   gitRepo: 'https://github.com/DummyFish/Fish-pond',
   password: '',
   logs: [],
-  trendData: {
-    labels: [
-      '2020-5-10',
-      '2020-5-11',
-      '2020-5-12',
-      '2020-5-13',
-      '2020-5-14',
-      '2020-5-15',
-      '2020-5-16',
-      '2020-5-17',
-      '2020-5-18',
-      '2020-5-19'
-    ],
-    value: [2, 5, 10, 7, 13, 35, 23, 6]
-  }
+  trendData: null
 })
 
 // services: [
@@ -172,11 +158,5 @@ export const actions = {
       .catch(function(error) {
         console.log(error)
       })
-  }
-}
-
-export const getters = {
-  getServiceDataStats(state) {
-    return state.serviceDataStats
   }
 }

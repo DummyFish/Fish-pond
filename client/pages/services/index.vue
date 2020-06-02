@@ -16,10 +16,10 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-text-field
+                    v-model="hostIp"
                     dense
                     single-line
                     persistent-hint
-                    v-model="hostIp"
                     :append-outer-icon="'mdi-check-bold'"
                     :hint="'Service Port #'"
                     :placeholder="honeypot.ip"
@@ -65,10 +65,10 @@
                   ></v-switch>
                   <v-spacer></v-spacer>
                   <v-text-field
+                    v-model="ports[index]"
                     dense
                     single-line
                     persistent-hint
-                    v-model="ports[index]"
                     :append-outer-icon="'mdi-check-bold'"
                     :hint="'Service Port #'"
                     :placeholder="service.port"

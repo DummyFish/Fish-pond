@@ -1377,3 +1377,174 @@
 31-05-2020 20:20:50 pyftpdlib:INFO     received interrupt signal
 31-05-2020 20:20:50 pyftpdlib:INFO     >>> shutting down FTP server, 1 socket(s), pid=14238 <<<
 31-05-2020 20:20:50 pyftpdlib:DEBUG    [debug] closing IOLoop (<pyftpdlib.ioloop.Kqueue (fds=1, tasks=0) at 0x109e26ed0>)
+01-06-2020 21:03:06 ssh:INFO     service ssh initializing...
+01-06-2020 21:03:06 smtp:INFO     service smtp initializing...
+01-06-2020 21:03:06 ssh:INFO     Ports: 22
+01-06-2020 21:03:06 ftp:INFO     service ftp initializing...
+01-06-2020 21:03:06 ssh:INFO     Log filepath: ../logfile.log
+01-06-2020 21:03:06 smtp:INFO     Ports: 25
+01-06-2020 21:03:06 ftp:INFO     Ports: 21
+01-06-2020 21:03:06 smtp:INFO     Log filepath: ../logfile.log
+01-06-2020 21:03:06 ftp:INFO     Log filepath: ../logfile.log
+01-06-2020 21:03:06 rdp:INFO     service rdp initializing...
+01-06-2020 21:03:06 rdp:INFO     Ports: 3390
+01-06-2020 21:03:06 telnet:INFO     service telnet initializing...
+01-06-2020 21:03:06 telnet:INFO     Ports: 23
+01-06-2020 21:03:06 telnet:INFO     Log filepath: ../logfile.log
+01-06-2020 21:03:06 rdp:INFO     Log filepath: ../logfile.log
+01-06-2020 21:03:06 redis:INFO     service redis initializing...
+01-06-2020 21:03:06 redis:INFO     Ports: 6379
+01-06-2020 21:03:06 redis:INFO     Log filepath: ../logfile.log
+01-06-2020 21:03:06 pop3:INFO     service pop3 initializing...
+01-06-2020 21:03:06 pyftpdlib:INFO     concurrency model: async
+01-06-2020 21:03:06 pop3:INFO     Ports: 995
+01-06-2020 21:03:06 pyftpdlib:INFO     masquerade (NAT) address: None
+01-06-2020 21:03:06 pop3:INFO     Log filepath: ../logfile.log
+01-06-2020 21:03:06 pyftpdlib:INFO     passive ports: None
+01-06-2020 21:03:06 pyftpdlib:DEBUG    poller: 'pyftpdlib.ioloop.Kqueue'
+01-06-2020 21:03:06 pyftpdlib:DEBUG    authorizer: 'Honeypot.services.ftp.ftp.FakeAuthorizer'
+01-06-2020 21:03:06 pyftpdlib:DEBUG    use sendfile(2): True
+01-06-2020 21:03:06 pyftpdlib:DEBUG    handler: 'pyftpdlib.handlers.type'
+01-06-2020 21:03:06 pyftpdlib:DEBUG    max connections: 256
+01-06-2020 21:03:06 pyftpdlib:DEBUG    max connections per ip: 5
+01-06-2020 21:03:06 pyftpdlib:DEBUG    timeout: 600
+01-06-2020 21:03:06 pyftpdlib:DEBUG    banner: 'FTP service is ready'
+01-06-2020 21:03:06 pyftpdlib:DEBUG    max login attempts: 3
+01-06-2020 21:03:06 pyftpdlib:INFO     >>> starting FTP server on 0.0.0.0:21, pid=23803 <<<
+01-06-2020 22:50:13 ssh:INFO     service ssh initializing...
+01-06-2020 22:50:13 ssh:INFO     Ports: 22
+01-06-2020 22:50:13 ssh:INFO     Log filepath: ../logfile.log
+01-06-2020 22:50:13 ftp:INFO     service ftp initializing...
+01-06-2020 22:50:13 telnet:INFO     service telnet initializing...
+01-06-2020 22:50:13 smtp:INFO     service smtp initializing...
+01-06-2020 22:50:13 telnet:INFO     Ports: 23
+01-06-2020 22:50:13 ftp:INFO     Ports: 21
+01-06-2020 22:50:13 smtp:INFO     Ports: 25
+01-06-2020 22:50:13 smtp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:50:13 telnet:INFO     Log filepath: ../logfile.log
+01-06-2020 22:50:13 ftp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:50:13 rdp:INFO     service rdp initializing...
+01-06-2020 22:50:13 rdp:INFO     Ports: 3390
+01-06-2020 22:50:13 redis:INFO     service redis initializing...
+01-06-2020 22:50:13 redis:INFO     Ports: 6379
+01-06-2020 22:50:13 rdp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:50:13 redis:INFO     Log filepath: ../logfile.log
+01-06-2020 22:50:13 pyftpdlib:INFO     concurrency model: async
+01-06-2020 22:50:13 pyftpdlib:INFO     masquerade (NAT) address: None
+01-06-2020 22:50:13 pyftpdlib:INFO     passive ports: None
+01-06-2020 22:50:13 pyftpdlib:DEBUG    poller: 'pyftpdlib.ioloop.Kqueue'
+01-06-2020 22:50:13 pyftpdlib:DEBUG    authorizer: 'Honeypot.services.ftp.ftp.FakeAuthorizer'
+01-06-2020 22:50:13 pop3:INFO     service pop3 initializing...
+01-06-2020 22:50:13 pyftpdlib:DEBUG    use sendfile(2): True
+01-06-2020 22:50:13 pyftpdlib:DEBUG    handler: 'pyftpdlib.handlers.type'
+01-06-2020 22:50:13 pop3:INFO     Ports: 995
+01-06-2020 22:50:13 pyftpdlib:DEBUG    max connections: 256
+01-06-2020 22:50:13 pop3:INFO     Log filepath: ../logfile.log
+01-06-2020 22:50:13 pyftpdlib:DEBUG    max connections per ip: 5
+01-06-2020 22:50:13 pyftpdlib:DEBUG    timeout: 600
+01-06-2020 22:50:13 pyftpdlib:DEBUG    banner: 'FTP service is ready'
+01-06-2020 22:50:13 pyftpdlib:DEBUG    max login attempts: 3
+01-06-2020 22:50:13 pyftpdlib:INFO     >>> starting FTP server on 0.0.0.0:21, pid=28225 <<<
+01-06-2020 22:56:15 ssh:INFO     service ssh initializing...
+01-06-2020 22:56:15 ssh:INFO     Ports: 22
+01-06-2020 22:56:15 ssh:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:15 smtp:INFO     service smtp initializing...
+01-06-2020 22:56:15 smtp:INFO     Ports: 25
+01-06-2020 22:56:15 ftp:INFO     service ftp initializing...
+01-06-2020 22:56:15 smtp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:15 ftp:INFO     Ports: 21
+01-06-2020 22:56:15 ftp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:15 telnet:INFO     service telnet initializing...
+01-06-2020 22:56:15 telnet:INFO     Ports: 23
+01-06-2020 22:56:15 telnet:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:15 rdp:INFO     service rdp initializing...
+01-06-2020 22:56:15 rdp:INFO     Ports: 3390
+01-06-2020 22:56:15 rdp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:15 pyftpdlib:INFO     concurrency model: async
+01-06-2020 22:56:15 pyftpdlib:INFO     masquerade (NAT) address: None
+01-06-2020 22:56:15 pyftpdlib:INFO     passive ports: None
+01-06-2020 22:56:15 redis:INFO     service redis initializing...
+01-06-2020 22:56:15 pyftpdlib:DEBUG    poller: 'pyftpdlib.ioloop.Kqueue'
+01-06-2020 22:56:15 redis:INFO     Ports: 6379
+01-06-2020 22:56:15 pyftpdlib:DEBUG    authorizer: 'Honeypot.services.ftp.ftp.FakeAuthorizer'
+01-06-2020 22:56:15 redis:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:15 pyftpdlib:DEBUG    use sendfile(2): True
+01-06-2020 22:56:15 pyftpdlib:DEBUG    handler: 'pyftpdlib.handlers.type'
+01-06-2020 22:56:15 pyftpdlib:DEBUG    max connections: 256
+01-06-2020 22:56:15 pyftpdlib:DEBUG    max connections per ip: 5
+01-06-2020 22:56:15 pop3:INFO     service pop3 initializing...
+01-06-2020 22:56:15 pyftpdlib:DEBUG    timeout: 600
+01-06-2020 22:56:15 pop3:INFO     Ports: 995
+01-06-2020 22:56:15 pyftpdlib:DEBUG    banner: 'FTP service is ready'
+01-06-2020 22:56:15 pop3:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:15 pyftpdlib:DEBUG    max login attempts: 3
+01-06-2020 22:56:15 pyftpdlib:INFO     >>> starting FTP server on 0.0.0.0:21, pid=28432 <<<
+01-06-2020 22:56:41 ssh:INFO     service ssh initializing...
+01-06-2020 22:56:41 smtp:INFO     service smtp initializing...
+01-06-2020 22:56:41 smtp:INFO     Ports: 25
+01-06-2020 22:56:41 ssh:INFO     Ports: 22
+01-06-2020 22:56:41 smtp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:41 ssh:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:41 ftp:INFO     service ftp initializing...
+01-06-2020 22:56:41 ftp:INFO     Ports: 21
+01-06-2020 22:56:41 telnet:INFO     service telnet initializing...
+01-06-2020 22:56:41 ftp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:41 telnet:INFO     Ports: 23
+01-06-2020 22:56:41 telnet:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:41 rdp:INFO     service rdp initializing...
+01-06-2020 22:56:41 rdp:INFO     Ports: 3390
+01-06-2020 22:56:41 rdp:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:41 pyftpdlib:INFO     concurrency model: async
+01-06-2020 22:56:41 redis:INFO     service redis initializing...
+01-06-2020 22:56:41 pyftpdlib:INFO     masquerade (NAT) address: None
+01-06-2020 22:56:41 redis:INFO     Ports: 6379
+01-06-2020 22:56:41 pyftpdlib:INFO     passive ports: None
+01-06-2020 22:56:41 redis:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:41 pop3:INFO     service pop3 initializing...
+01-06-2020 22:56:41 pyftpdlib:DEBUG    poller: 'pyftpdlib.ioloop.Kqueue'
+01-06-2020 22:56:41 pyftpdlib:DEBUG    authorizer: 'Honeypot.services.ftp.ftp.FakeAuthorizer'
+01-06-2020 22:56:41 pop3:INFO     Ports: 995
+01-06-2020 22:56:41 pop3:INFO     Log filepath: ../logfile.log
+01-06-2020 22:56:41 pyftpdlib:DEBUG    use sendfile(2): True
+01-06-2020 22:56:41 pyftpdlib:DEBUG    handler: 'pyftpdlib.handlers.type'
+01-06-2020 22:56:41 pyftpdlib:DEBUG    max connections: 256
+01-06-2020 22:56:41 pyftpdlib:DEBUG    max connections per ip: 5
+01-06-2020 22:56:41 pyftpdlib:DEBUG    timeout: 600
+01-06-2020 22:56:41 pyftpdlib:DEBUG    banner: 'FTP service is ready'
+01-06-2020 22:56:41 pyftpdlib:DEBUG    max login attempts: 3
+01-06-2020 22:56:41 pyftpdlib:INFO     >>> starting FTP server on 0.0.0.0:21, pid=28484 <<<
+01-06-2020 23:03:08 pyftpdlib:INFO     received interrupt signal
+01-06-2020 23:03:10 ssh:INFO     service ssh initializing...
+01-06-2020 23:03:10 ssh:INFO     Ports: 22
+01-06-2020 23:03:10 ssh:INFO     Log filepath: ../logfile.log
+01-06-2020 23:03:10 smtp:INFO     service smtp initializing...
+01-06-2020 23:03:10 smtp:INFO     Ports: 25
+01-06-2020 23:03:10 smtp:INFO     Log filepath: ../logfile.log
+01-06-2020 23:03:10 ftp:INFO     service ftp initializing...
+01-06-2020 23:03:10 ftp:INFO     Ports: 21
+01-06-2020 23:03:10 ftp:INFO     Log filepath: ../logfile.log
+01-06-2020 23:03:10 telnet:INFO     service telnet initializing...
+01-06-2020 23:03:10 telnet:INFO     Ports: 23
+01-06-2020 23:03:10 telnet:INFO     Log filepath: ../logfile.log
+01-06-2020 23:03:10 rdp:INFO     service rdp initializing...
+01-06-2020 23:03:10 rdp:INFO     Ports: 3390
+01-06-2020 23:03:10 rdp:INFO     Log filepath: ../logfile.log
+01-06-2020 23:03:10 pyftpdlib:INFO     concurrency model: async
+01-06-2020 23:03:10 pyftpdlib:INFO     masquerade (NAT) address: None
+01-06-2020 23:03:10 pyftpdlib:INFO     passive ports: None
+01-06-2020 23:03:10 pyftpdlib:DEBUG    poller: 'pyftpdlib.ioloop.Kqueue'
+01-06-2020 23:03:10 pyftpdlib:DEBUG    authorizer: 'Honeypot.services.ftp.ftp.FakeAuthorizer'
+01-06-2020 23:03:10 pop3:INFO     service pop3 initializing...
+01-06-2020 23:03:10 pyftpdlib:DEBUG    use sendfile(2): True
+01-06-2020 23:03:10 redis:INFO     service redis initializing...
+01-06-2020 23:03:10 pyftpdlib:DEBUG    handler: 'pyftpdlib.handlers.type'
+01-06-2020 23:03:10 pop3:INFO     Ports: 995
+01-06-2020 23:03:10 redis:INFO     Ports: 6379
+01-06-2020 23:03:10 pyftpdlib:DEBUG    max connections: 256
+01-06-2020 23:03:10 pop3:INFO     Log filepath: ../logfile.log
+01-06-2020 23:03:10 redis:INFO     Log filepath: ../logfile.log
+01-06-2020 23:03:10 pyftpdlib:DEBUG    max connections per ip: 5
+01-06-2020 23:03:10 pyftpdlib:DEBUG    timeout: 600
+01-06-2020 23:03:10 pyftpdlib:DEBUG    banner: 'FTP service is ready'
+01-06-2020 23:03:10 pyftpdlib:DEBUG    max login attempts: 3
+01-06-2020 23:03:10 pyftpdlib:INFO     >>> starting FTP server on 0.0.0.0:21, pid=29104 <<<

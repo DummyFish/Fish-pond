@@ -23,6 +23,7 @@
                 label="Please enter your password"
                 hint="Please enter your password"
                 @click:append="show = !show"
+                @keydown.enter.native.stop="userLogin(psword)"
               ></v-text-field>
               <v-btn
                 text

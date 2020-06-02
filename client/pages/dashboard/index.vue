@@ -19,9 +19,9 @@
         </v-card>
         <v-card class="ma-6 pa-6 mt-0">
           <v-card-text class="display-2 pl-7">
-            Total attack counts in last 10 days
+            Attack Trends
           </v-card-text>
-          <v-card-text>
+          <!-- <v-card-text>
             <v-sheet color="rgba(0, 0, 0, .12)">
               <v-sparkline
                 :labels="trendData.labels"
@@ -34,7 +34,8 @@
               >
               </v-sparkline>
             </v-sheet>
-          </v-card-text>
+          </v-card-text> -->
+          <streamGraph> </streamGraph>
         </v-card>
       </v-col>
       <v-col :col="3">
@@ -48,17 +49,27 @@
               >
                 <v-card>
                   <v-card-text>
-                    <p class="display-1 text--primary">
+                    <span class="display-1 text--primary">
                       {{ log.service }}
-                    </p>
-                    <p>ip address:</p>
-                    <div class="text--primary">
-                      {{ log.ip }}
-                    </div>
-                    <p>time:</p>
-                    <div class="text--primary">
-                      {{ log.time }}
-                    </div>
+                    </span>
+                    <br />
+                    <span class="text--primary">IP Address:</span>
+                    <br />
+                    <span>
+                      {{ '  ' + log.ip }}
+                    </span>
+                    <br />
+                    <span class="text--primary">Time:</span>
+                    <br />
+                    <span>
+                      {{ '  ' + log.time }}
+                    </span>
+                    <br />
+                    <span class="text--primary">Metadata:</span>
+                    <br />
+                    <span v-for="metadata in filter(log.meta)" :key="metadata">
+                      {{ '  ' + metadata }}
+                    </span>
                   </v-card-text>
                   <v-card-actions>
                     <!-- <v-spacer></v-spacer>
@@ -75,11 +86,11 @@
 </template>
 
 <script>
-// import individualCount from '../components/individualCount'
+import streamGraph from '@/components/streamGraph.vue'
 
 export default {
   components: {
-    // individualCount
+    streamGraph
   },
   data: () => ({
     // items: [
@@ -166,6 +177,11 @@ export default {
     },
     trendData() {
       return this.$store.state.trendData
+    }
+  },
+  methods: {
+    filter(arr) {
+      return arr.filter((meta) => meta !== '')
     }
   },
   // created() {
