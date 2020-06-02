@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 
 
 def check_service_num():
@@ -35,3 +36,20 @@ def get_latest_log(date=None):
         data = database.cursor()
         log = data.execute("select * from FishPond where exetime > ? Order By exetime Desc limit 5", (date,)).fetchall()
     return log
+
+
+def get_10_day():
+    ten_day_list = []
+    database = sqlite3.connect('../logger.db')
+    data = database.cursor()
+    for i in range(10):
+        date = datetime.date.today() - datetime.timedelta(days=i)
+        date_sum = {'date': str(date), 'ssh': 0, 'smtp': 0, 'ftp': 0, 'telnet': 0, 'rdp': 0, 'redis': 0, 'pop3': 0,
+                    'tftp': 0}
+        log = data.execute(
+            "select date(exetime), service, count(*) from FishPond where date(exetime) = date('now', ?) GROUP "
+            "BY service, date(exetime)", ('-' + str(i) + ' days',)).fetchall()
+        for j in log:
+            date_sum[j[1]] = j[2]
+        ten_day_list.append(date_sum)
+    return ten_day_list
