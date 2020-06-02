@@ -2,7 +2,7 @@ import configparser
 from multiprocessing import Process, Queue
 from Honeypot.modify_config import reset, get_default, get_config, set_config
 from Honeypot.checkService import Check
-from Honeypot.analysis import get_latest_log, check_service_num
+from Honeypot.analysis import get_latest_log, check_service_num, get_ten_day
 
 latest_date = ''
 print("Start honeypot")
@@ -29,13 +29,14 @@ def get_logs_api(latest_date = latest_date):
         data = get_latest_log()
     else:
         data = get_latest_log(latest_date)
-    latest_date = data[0][1]
+    try:
+        latest_date = data[0][1]
+    except IndexError:
+        pass
     logs = []
     index = 1
     for log in data:
-        # print("LOG: ")
-        # print(log)
-        logs.append({'id': index, 'ip': log[4], 'service': log[2], 'time': log[1], 'meta': log[3]})
+        logs.append({'id': index, 'ip': log[4], 'service': log[2], 'time': log[1], 'meta': [log[3], log[5], log[6], log[7]]})
         index += 1
     return logs
 
@@ -47,3 +48,6 @@ def get_honeypot_config_api(config_filepath = config_filepath):
 
 def get_service_config_api(config_filepath = config_filepath):
     return get_config(config_filepath)
+
+def get_trend_data_api():
+    return get_ten_day()
