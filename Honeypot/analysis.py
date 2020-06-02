@@ -30,15 +30,20 @@ def get_latest_log(date=None):
     if (date == None):
         database = sqlite3.connect('../logger.db')
         data = database.cursor()
-        log = data.execute("select * from FishPond Order By exetime Desc limit 5").fetchall()
+        log = data.execute(
+            "select id, date(exetime), service, types, ip, username, password, command from FishPond Order By exetime "
+            "Desc limit 5").fetchall()
     else:
         database = sqlite3.connect('../logger.db')
         data = database.cursor()
-        log = data.execute("select * from FishPond where exetime > ? Order By exetime Desc limit 5", (date,)).fetchall()
+        log = data.execute(
+            "select id, date(exetime), service, types, ip, username, password, command from FishPond where exetime > "
+            "? Order By exetime Desc limit 5",
+            (date,)).fetchall()
     return log
 
 
-def get_10_day():
+def get_ten_day():
     ten_day_list = []
     database = sqlite3.connect('../logger.db')
     data = database.cursor()
