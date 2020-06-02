@@ -22,7 +22,7 @@ def keyboardInterruptHandler(signal, frame):
 
 def create_app():
     signal.signal(signal.SIGINT, keyboardInterruptHandler)
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../client_build', static_url_path='/')
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     def require_authenticate(f):
@@ -55,6 +55,11 @@ def create_app():
                 return jsonify(invalid), 401
 
         return verify_token
+
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>') 
+    def index(path):
+        return app.send_static_file('index.html')
 
     @app.route('/api/auth/login', methods=['POST'])
     def login():
