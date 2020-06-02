@@ -59,7 +59,24 @@ def create_app():
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>') 
     def index(path):
+        print(path)
         return app.send_static_file('index.html')
+    
+    @app.route('/dashboard')
+    def dashboard_index():
+        return app.send_static_file('dashboard/index.html')
+
+    @app.route('/user')
+    def user_index():
+        return app.send_static_file('user/index.html')
+
+    @app.route('/services')
+    def services_index():
+        return app.send_static_file('services/index.html')
+
+    @app.route('/about')
+    def about_index():
+        return app.send_static_file('about/index.html')
 
     @app.route('/api/auth/login', methods=['POST'])
     def login():

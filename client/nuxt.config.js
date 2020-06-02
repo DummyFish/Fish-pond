@@ -129,5 +129,9 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  generate: {
+    fallback: true,
+    routes: ['/dashboard', '/services', '/about', '/user']
   }
 }
