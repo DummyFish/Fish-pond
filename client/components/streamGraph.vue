@@ -57,24 +57,7 @@ export default {
     drawStreamGraph() {
       const selector = '#streamGraph'
       const svg = d3.select(selector)
-      // const path = svg
-      //   .append('g')
-      //   .selectAll('path')
-      //   .data(data)
-      //   .enter()
-      //   .append('path')
-      //   .attr('fill', ({ key }) => {
-      //     return this.color(key)
-      //   })
-      //   .attr('d', this.area)
-
-      // path
-      //   .data(data)
-      //   .transition()
-      //   .delay(2500)
-      //   .duration(2500)
-      //   .attr('d', this.area)
-      //   .end()
+      svg.remove()
       const data = this.trendData()
 
       const keys = Object.keys(data[0]).filter((key) => key !== 'date')
@@ -84,25 +67,15 @@ export default {
         .keys(keys)
         .offset(d3.stackOffsetWiggle)
         .order(d3.stackOrderInsideOut)(data)
-
-      // console.log(series)
-
       const color = function(key) {
         return this.colorMap[key]
       }.bind(this)
 
       const xScale = d3
         .scaleTime()
-        .domain(
-          // d3.extent(data, (d) => {
-          //   console.log(Date(d.date))
-          //   return new Date(d.date)
-          // })
-          [d3.min(data, (d) => d.date), d3.max(data, (d) => d.date)]
-        )
+        .domain([d3.min(data, (d) => d.date), d3.max(data, (d) => d.date)])
         .range([this.margin.left, this.width - this.margin.right])
 
-      // console.log([this.height - this.margin.bottom, this.margin.top])
       const yScale = d3
         .scaleLinear()
         .domain([
@@ -114,8 +87,6 @@ export default {
       const area = d3
         .area()
         .x((d) => {
-          // console.log('area', d)
-          // console.log(xScale(d.data.date))
           return xScale(d.data.date)
         })
         .y0((d) => {
@@ -136,47 +107,21 @@ export default {
         .attr('d', area)
         .append('title')
         .text(({ key }) => key)
-      // svg.append('g').call(this.xAxis)
-
-      // d3.timer(
-      //   function(elapsed) {
-      //     console.log(elapsed)
-      //     svg.node()
-      //     path
-      //       .data(data)
-      //       .transition()
-      //       .delay(2500)
-      //       .duration(2500)
-      //       .attr('d', this.area)
-      //       .end()
-      //   }.bind(this),
-      //   5000
-      // )
-      // while (true) {
-      //   console.log('loop')
-
-      // }
     },
     check() {
-      console.log(this.trendData())
+      // console.log(this.trendData())
       if (this.trendData() === null) {
         setTimeout(this.check, 1000)
       } else {
         this.drawStreamGraph()
       }
+    },
+    updateGraph() {
+      if (this.trendData() !== null) {
+        this.drawStreamGraph()
+        setTimeout(this.updateGraph, 5000)
+      }
     }
-
-    // ,
-    // xAxis(g) {
-    //   g.attr('transform', `translate(0,${this.height - this.margin.bottom})`)
-    //     .call(
-    //       d3
-    //         .axisBottom(this.x)
-    //         .ticks(this.width / 80)
-    //         .tickSizeOuter(0)
-    //     )
-    //     .call((g) => g.select('.domain').remove())
-    // }
   }
 }
 </script>

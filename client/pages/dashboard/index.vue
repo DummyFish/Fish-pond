@@ -3,7 +3,7 @@
     <v-row>
       <v-col :cols="9">
         <v-card class="ma-6 pa-6 mt-0">
-          <v-card-text class="display-2 pl-7">Attack attempt count</v-card-text>
+          <v-card-text class="display-2 pl-7">Attack Count</v-card-text>
           <v-container fluid>
             <v-row dense>
               <v-col v-for="item in items" :key="item.id" :cols="3">
@@ -21,25 +21,12 @@
           <v-card-text class="display-2 pl-7">
             Attack Trends
           </v-card-text>
-          <!-- <v-card-text>
-            <v-sheet color="rgba(0, 0, 0, .12)">
-              <v-sparkline
-                :labels="trendData.labels"
-                :value="trendData.value"
-                color="rgba(255, 255, 255, .7)"
-                height="100"
-                padding="24"
-                stroke-linecap="round"
-                smooth
-              >
-              </v-sparkline>
-            </v-sheet>
-          </v-card-text> -->
-          <streamGraph> </streamGraph>
+          <streamGraph></streamGraph>
         </v-card>
       </v-col>
       <v-col :col="3">
         <v-card class="mr-6 pa-6 mt-0">
+          <v-card-text class="display-2 pl-7">Attack Timeline</v-card-text>
           <v-timeline dark dense>
             <v-slide-x-transition group>
               <v-timeline-item
@@ -92,79 +79,7 @@ export default {
   components: {
     streamGraph
   },
-  data: () => ({
-    // items: [
-    //   {
-    //     id: 'ssh',
-    //     color: '#AE6A6A',
-    //     count: 10
-    //   },
-    //   { id: 'ftp', color: '#A98365', count: 15 },
-    //   { id: 'rdp', color: '#9E9E6F', count: 6 },
-    //   { id: 'redis', color: '#7BA375', count: 8 },
-    //   { id: 'smtp', color: '#5F9DA5', count: 1 },
-    //   { id: 'telnet', color: '#6278AF', count: 4 },
-    //   { id: 'tftp', color: '#736DB1', count: 9 },
-    //   { id: 'pop3', color: '#A979A9', count: 9 }
-    // ],
-    // logs: [
-    //   {
-    //     id: 1,
-    //     ip: '172.134.2.4',
-    //     service: 'rdp',
-    //     time: '2020-5-15 10:04:15'
-    //   },
-    //   {
-    //     id: 2,
-    //     ip: '143.123.78.9',
-    //     service: 'rdp',
-    //     time: '2020-5-14 22:30:20'
-    //   },
-    //   {
-    //     id: 3,
-    //     ip: '246.3.243.23',
-    //     service: 'smtp',
-    //     time: '2020-5-14 21:02:54'
-    //   },
-    //   {
-    //     id: 4,
-    //     ip: '132.35.2.83',
-    //     service: 'telnet',
-    //     time: '2020-5-14 06:53:28'
-    //   },
-    //   {
-    //     id: 5,
-    //     ip: '193.8.13.235',
-    //     service: 'ssh',
-    //     time: '2020-5-13 00:03:23'
-    //   }
-    // ],
-    // colorMap: {
-    //   ssh: '#AE6A6A',
-    //   ftp: '#A98365',
-    //   rdp: '#9E9E6F',
-    //   redis: '#7BA375',
-    //   smtp: '#5F9DA5',
-    //   telnet: '#6278AF',
-    //   tftp: '#736DB1',
-    //   pop3: '#A979A9'
-    // },
-    // trendData: {
-    //   labels: [
-    //     '2020-5-10',
-    //     '2020-5-11',
-    //     '2020-5-12',
-    //     '2020-5-13',
-    //     '2020-5-14',
-    //     '2020-5-15',
-    //     '2020-5-16',
-    //     '2020-5-17',
-    //     '2020-5-18',
-    //     '2020-5-19'
-    //   ],
-    //   value: [2, 5, 10, 7, 13, 35, 23, 6]
-    // }
-  }),
+  data: () => ({}),
   computed: {
     colorMap() {
       return this.$store.state.servicesColorMapping
@@ -184,14 +99,6 @@ export default {
       return arr.filter((meta) => meta !== '')
     }
   },
-  // created() {
-  //   if (!this.$auth.loggedIn) {
-  //     console.log('before create')
-  //     this.$router.push({
-  //       path: '/login'
-  //     })
-  //   }
-  // },
   mounted() {
     this.$store.dispatch('fetch_init_data')
     // var updateLogs =

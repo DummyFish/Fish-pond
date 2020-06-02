@@ -29,12 +29,13 @@ def get_logs_api(latest_date = latest_date):
         data = get_latest_log()
     else:
         data = get_latest_log(latest_date)
-    latest_date = data[0][1]
+    try:
+        latest_date = data[0][1]
+    except IndexError:
+        pass
     logs = []
     index = 1
     for log in data:
-        # print("LOG: ")
-        # print(log)
         logs.append({'id': index, 'ip': log[4], 'service': log[2], 'time': log[1], 'meta': [log[3], log[5], log[6], log[7]]})
         index += 1
     return logs

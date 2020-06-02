@@ -1,0 +1,34 @@
+02-06-2020 10:59:26 ssh:INFO     service ssh initializing...
+02-06-2020 10:59:26 ssh:INFO     Ports: 22
+02-06-2020 10:59:26 ssh:INFO     Log filepath: ../logfile.log
+02-06-2020 10:59:26 smtp:INFO     service smtp initializing...
+02-06-2020 10:59:26 smtp:INFO     Ports: 25
+02-06-2020 10:59:26 ftp:INFO     service ftp initializing...
+02-06-2020 10:59:26 smtp:INFO     Log filepath: ../logfile.log
+02-06-2020 10:59:26 ftp:INFO     Ports: 21
+02-06-2020 10:59:26 ftp:INFO     Log filepath: ../logfile.log
+02-06-2020 10:59:26 telnet:INFO     service telnet initializing...
+02-06-2020 10:59:26 rdp:INFO     service rdp initializing...
+02-06-2020 10:59:26 telnet:INFO     Ports: 23
+02-06-2020 10:59:26 rdp:INFO     Ports: 3390
+02-06-2020 10:59:26 telnet:INFO     Log filepath: ../logfile.log
+02-06-2020 10:59:26 rdp:INFO     Log filepath: ../logfile.log
+02-06-2020 10:59:26 redis:INFO     service redis initializing...
+02-06-2020 10:59:26 redis:INFO     Ports: 6379
+02-06-2020 10:59:26 redis:INFO     Log filepath: ../logfile.log
+02-06-2020 10:59:26 pyftpdlib:INFO     concurrency model: async
+02-06-2020 10:59:26 pyftpdlib:INFO     masquerade (NAT) address: None
+02-06-2020 10:59:26 pyftpdlib:INFO     passive ports: None
+02-06-2020 10:59:26 pop3:INFO     service pop3 initializing...
+02-06-2020 10:59:26 pop3:INFO     Ports: 995
+02-06-2020 10:59:26 pyftpdlib:DEBUG    poller: 'pyftpdlib.ioloop.Kqueue'
+02-06-2020 10:59:26 pyftpdlib:DEBUG    authorizer: 'Honeypot.services.ftp.ftp.FakeAuthorizer'
+02-06-2020 10:59:26 pop3:INFO     Log filepath: ../logfile.log
+02-06-2020 10:59:26 pyftpdlib:DEBUG    use sendfile(2): True
+02-06-2020 10:59:26 pyftpdlib:DEBUG    handler: 'pyftpdlib.handlers.type'
+02-06-2020 10:59:26 pyftpdlib:DEBUG    max connections: 256
+02-06-2020 10:59:26 pyftpdlib:DEBUG    max connections per ip: 5
+02-06-2020 10:59:26 pyftpdlib:DEBUG    timeout: 600
+02-06-2020 10:59:26 pyftpdlib:DEBUG    banner: 'FTP service is ready'
+02-06-2020 10:59:26 pyftpdlib:DEBUG    max login attempts: 3
+02-06-2020 10:59:26 pyftpdlib:INFO     >>> starting FTP server on 0.0.0.0:21, pid=35842 <<<
