@@ -21,11 +21,14 @@ export default {
     }
   },
   mounted() {
-    setTimeout(null, 2000)
+    setTimeout(null, 5000)
     const selector = '#svgContainer'
     this.width = document.querySelector(
       selector
     ).parentElement.children[0].clientWidth
+    if (this.width > 948) {
+      this.width = 948
+    }
     this.height = 400
     // this.height = document.querySelector(selector).parentElement.clientHeight
     this.margin = { top: 0, right: 20, bottom: 30, left: 20 }
