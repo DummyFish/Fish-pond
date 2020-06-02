@@ -8,9 +8,9 @@
             <v-row dense>
               <v-col v-for="item in items" :key="item.id" :cols="3">
                 <v-card :color="colorMap[item.id]" shaped class="ma-4">
-                  <v-card-text class="display-1" v-text="item.id">
+                  <v-card-text class="display-2" v-text="item.id">
                   </v-card-text>
-                  <v-card-text class="display-4" v-text="item.count">
+                  <v-card-text class="display-1" v-text="item.count">
                   </v-card-text>
                 </v-card>
               </v-col>
