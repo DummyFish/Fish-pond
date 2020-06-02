@@ -41,7 +41,7 @@ export default {
         return null
       }
       temp = JSON.parse(JSON.stringify(temp))
-      console.log(temp)
+      // console.log(temp)
       temp.forEach((element) => {
         for (const property in element) {
           if (property !== 'date') {
@@ -51,13 +51,14 @@ export default {
           }
         }
       })
-      console.log(temp)
+      // console.log(temp)
       return temp
     },
     drawStreamGraph() {
       const selector = '#streamGraph'
       const svg = d3.select(selector)
       svg.remove()
+      svg.attr('width', this.width).attr('height', this.height)
       const data = this.trendData()
 
       const keys = Object.keys(data[0]).filter((key) => key !== 'date')
@@ -96,7 +97,7 @@ export default {
           return yScale(d[1])
         })
 
-      console.log(area)
+      // console.log(area)
 
       svg
         .append('g')
@@ -114,12 +115,7 @@ export default {
         setTimeout(this.check, 1000)
       } else {
         this.drawStreamGraph()
-      }
-    },
-    updateGraph() {
-      if (this.trendData() !== null) {
-        this.drawStreamGraph()
-        setTimeout(this.updateGraph, 5000)
+        setTimeout(this.check, 5000)
       }
     }
   }

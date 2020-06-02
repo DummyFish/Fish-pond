@@ -94,17 +94,17 @@ export default {
       return this.$store.state.trendData
     }
   },
-  methods: {
-    filter(arr) {
-      return arr.filter((meta) => meta !== '')
-    }
-  },
   mounted() {
     this.$store.dispatch('fetch_init_data')
     // var updateLogs =
     window.setInterval(() => {
       this.$store.dispatch('fetch_update')
     }, 5000)
+  },
+  methods: {
+    filter(arr) {
+      return arr.filter((meta) => meta !== '')
+    }
   }
 }
 </script>

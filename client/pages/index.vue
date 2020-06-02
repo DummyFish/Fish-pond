@@ -12,7 +12,11 @@
           <v-card-text class="display-1 text--primary">
             Fish Pond Login
           </v-card-text>
-          <v-form v-model="isValid">
+          <v-form
+            id="loginForm"
+            v-model="isValid"
+            @submit.prevent="userLogin(psword)"
+          >
             <v-card-actions>
               <v-text-field
                 v-model="psword"
@@ -23,11 +27,11 @@
                 label="Please enter your password"
                 hint="Please enter your password"
                 @click:append="show = !show"
-                @keydown.enter.native.stop="userLogin(psword)"
               ></v-text-field>
               <v-btn
                 text
                 class="ma-5"
+                form="loginForm"
                 :disabled="!isValid"
                 @click="userLogin(psword)"
                 >Login</v-btn
