@@ -58,7 +58,6 @@ cmake-build-debug
 # npm
 .DS_Store
 node_modules
-/dist
 
 # local env files
 .env.local
@@ -153,7 +152,7 @@ typings/
 .nuxt
 
 # Nuxt generate
-dist
+# dist
 
 # vuepress build output
 .vuepress/dist

@@ -15,7 +15,7 @@ class Service(object):
         self.logger = self.prepare_logger()
 
     def prepare_logger(self):
-        logging.basicConfig(level=logging.DEBUG,
+        logging.basicConfig(level=logging.WARNING,
                             format="%(asctime)s %(name)s:%(levelname)-8s %(message)s",
                             datefmt="%d-%m-%Y %H:%M:%S",
                             filename=self.log_filepath)

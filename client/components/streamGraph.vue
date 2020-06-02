@@ -1,5 +1,5 @@
 <template>
-  <svg id="streamGraph"></svg>
+  <svg id="svgContainer"></svg>
 </template>
 
 <script>
@@ -21,7 +21,8 @@ export default {
     }
   },
   mounted() {
-    const selector = '#streamGraph'
+    setTimeout(null, 2000)
+    const selector = '#svgContainer'
     this.width = document.querySelector(
       selector
     ).parentElement.children[0].clientWidth
@@ -32,6 +33,8 @@ export default {
     d3.select(selector)
       .attr('width', this.width)
       .attr('height', this.height)
+      .append('g')
+      .attr('id', 'streamGraph')
     this.check()
   },
   methods: {
@@ -55,10 +58,15 @@ export default {
       return temp
     },
     drawStreamGraph() {
+      // alert()
       const selector = '#streamGraph'
-      const svg = d3.select(selector)
-      svg.remove()
-      svg.attr('width', this.width).attr('height', this.height)
+      d3.select(selector).remove()
+      const svg = d3
+        .select('#svgContainer')
+        .append('g')
+        .attr('id', 'streamGraph')
+
+      // svg.attr('width', this.width).attr('height', this.height)
       const data = this.trendData()
 
       const keys = Object.keys(data[0]).filter((key) => key !== 'date')
@@ -106,8 +114,9 @@ export default {
         .join('path')
         .attr('fill', ({ key }) => color(key))
         .attr('d', area)
-        .append('title')
-        .text(({ key }) => key)
+        .attr('id', 'graphContent')
+      // .append('title')
+      // .text(({ key }) => key)
     },
     check() {
       // console.log(this.trendData())

@@ -22,7 +22,7 @@ def keyboardInterruptHandler(signal, frame):
 
 def create_app():
     signal.signal(signal.SIGINT, keyboardInterruptHandler)
-    app = Flask(__name__, static_folder='../client_build', static_url_path='/')
+    app = Flask(__name__, static_folder='../dist', static_url_path='/')
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     def require_authenticate(f):
