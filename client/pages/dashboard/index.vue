@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col :cols="9">
+      <v-col :cols="12">
         <v-card class="ma-6 pa-6 mt-0">
           <v-card-text class="display-2 pl-7">Attack Count</v-card-text>
           <v-container fluid>
@@ -18,16 +18,8 @@
           </v-container>
         </v-card>
         <v-card class="ma-6 pa-6 mt-0">
-          <v-card-text class="display-2 pl-7">
-            Attack Trends
-          </v-card-text>
-          <streamGraph></streamGraph>
-        </v-card>
-      </v-col>
-      <v-col :col="3">
-        <v-card class="mr-6 pa-6 mt-0">
           <v-card-text class="display-2 pl-7">Attack Timeline</v-card-text>
-          <v-timeline dark dense>
+          <v-timeline dark>
             <v-slide-x-transition group>
               <v-timeline-item
                 v-for="log in logs"
@@ -66,6 +58,12 @@
               </v-timeline-item>
             </v-slide-x-transition>
           </v-timeline>
+        </v-card>
+        <v-card class="ma-6 pa-6 mt-0">
+          <v-card-text class="display-2 pl-7">
+            Attack Trends
+          </v-card-text>
+          <streamGraph></streamGraph>
         </v-card>
       </v-col>
     </v-row>
