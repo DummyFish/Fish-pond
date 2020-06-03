@@ -178,28 +178,28 @@ class Check:
                             ssh_process.terminate()
                         ssh_process = ssh_start(service_config['ssh'], host, log_filepath, logs)
                     if message == "smtp":
-                        if ssh_process is not None:
-                            ssh_process.terminate()
+                        if smtp_process is not None:
+                            smtp_process.terminate()
                         smtp_process = smtp_start(service_config['smtp'], host, log_filepath, logs)
                     if message == "ftp":
-                        if ssh_process is not None:
-                            ssh_process.terminate()
+                        if ftp_process is not None:
+                            ftp_process.terminate()
                         ftp_process = ftp_start(service_config['ftp'], host, log_filepath, logs)
                     if message == "telnet":
-                        if ssh_process is not None:
-                            ssh_process.terminate()
+                        if telnet_process is not None:
+                            telnet_process.terminate()
                         telnet_process = telnet_start(service_config['telnet'], host, log_filepath, logs)
                     if message == "rdp":
-                        if ssh_process is not None:
-                            ssh_process.terminate()
+                        if rdp_process is not None:
+                            rdp_process.terminate()
                         rdp_process = rdp_start(service_config['rdp'], host, log_filepath, logs)
                     if message == "redis":
-                        if ssh_process is not None:
-                            ssh_process.terminate()
+                        if redis_process is not None:
+                            redis_process.terminate()
                         redis_process = redis_start(service_config['redis'], host, log_filepath, logs)
                     if message == "pop3":
-                        if ssh_process is not None:
-                            ssh_process.terminate()
+                        if pop3_process is not None:
+                            pop3_process.terminate()
                         pop3_process = pop3_start(service_config['pop3'], host, log_filepath, logs)
                     if message == 0:
                         raise NormalException
