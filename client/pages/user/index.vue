@@ -7,7 +7,7 @@
             Reset Password
           </v-card-text>
           <v-form v-model="isValid">
-            <v-card-actions>
+            <v-card-actions class="d-flex flex-column align-stretch">
               <v-text-field
                 v-model="password"
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -17,6 +17,7 @@
                 label="New Password"
                 hint="At least 8 characters"
                 counter
+                width="100%"
                 @click:append="show1 = !show1"
               ></v-text-field>
               <v-spacer></v-spacer>
@@ -27,6 +28,7 @@
                 name="confirm password"
                 label="Confirm Password"
                 hint="At least 8 characters"
+                width="100%"
                 @click:append="show2 = !show2"
               ></v-text-field>
               <v-spacer></v-spacer>
