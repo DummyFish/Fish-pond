@@ -2,7 +2,7 @@
 
 ##setup procedure##
 
-git@github.com:DummyFish/Fish-pond.git
+git clone git@github.com:DummyFish/Fish-pond.git
 
 cd ./Fish-pond
 
